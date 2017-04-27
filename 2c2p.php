@@ -1,6 +1,7 @@
 <?php
 /*
-Plugin Name: 2C2P Payment Gateway
+
+Plugin Name: 2C2P-PG-woocommerce-plugin
 Plugin URI: http://www.2c2p.com/
 Description: Transforming millions of everyday payments with one time card facility
 Version: 7.0.0
