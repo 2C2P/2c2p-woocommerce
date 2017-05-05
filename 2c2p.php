@@ -160,7 +160,7 @@ function fun2c2p_init()
                         if(!empty($strHtml)){
                             echo "<table>";
                             echo "<tr>";
-                            echo "<th style='width:200px;'>Select Stored Card (Optional).</th>";
+                            echo "<th style='width:200px;'>I'll use a new card</th>";
                             echo "<td> <select name='wc_2c2p_stored_card'>";                            
                             echo "<option value='0'>Select Stored Card </option>";
                             echo $strHtml;
@@ -254,7 +254,7 @@ function fun2c2p_init()
         function check_2c2p_response() {
 
             global $woocommerce;
-            $isFounded = false;
+           /* $isFounded = false;
 
             //Stored stored card toek into user meta table with loggedin users only.
             if(is_user_logged_in()){
@@ -285,7 +285,7 @@ function fun2c2p_init()
                             add_user_meta(get_current_user_id(), "wc_2c2p_stored_card", $stored_card_data);
                     }
                 }
-            }
+            }*/
                             
             if (isset($_REQUEST['order_id']) && isset($_REQUEST['merchant_id'])) {
 
@@ -310,7 +310,40 @@ function fun2c2p_init()
                         if ($order->status !== 'completed') {
 
                             if ($isValidHash) {
-                                if (strcasecmp($status, "000") == 0) {
+                                if (strcasecmp($status, "000") == 0) { //Success payment.
+
+                                    $isFounded = false;
+
+                                    //Stored stored card toek into user meta table with loggedin users only.
+                                    if(is_user_logged_in()){
+                                        $stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
+                                        $stored_card_data = Array($_REQUEST['masked_pan']  => $_REQUEST['stored_card_unique_id']);
+
+                                        if(empty($stored_card)){
+                                            
+
+                                            if(!empty($_REQUEST['stored_card_unique_id'])){
+                                                add_user_meta(get_current_user_id(), "wc_2c2p_stored_card", $stored_card_data);
+                                            }
+                                        }
+                                        else{
+                                            foreach ($stored_card as $key => $value) {
+                                                foreach ($value as $innerKey => $innerValue) {
+                                                    if(array_key_exists('masked_pan',$_REQUEST) && array_key_exists('stored_card_unique_id',$_REQUEST)){
+                                                        if((strcasecmp($innerKey, $_REQUEST['masked_pan']) == 0 && strcasecmp($innerValue, $_REQUEST['stored_card_unique_id']) == 0)){
+                                                            $isFounded = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if(!$isFounded) {
+                                                if(!empty($_REQUEST['masked_pan']) && !empty($_REQUEST['stored_card_unique_id']))
+                                                    add_user_meta(get_current_user_id(), "wc_2c2p_stored_card", $stored_card_data);
+                                            }
+                                        }
+                                    } 
+
                                     $trans_authorised     = true;
                                     $this->msg['message'] = "Thank you for shopping with us. Your account has been charged and your transaction is successful.";
                                     $this->msg['class']   = 'woocommerce-message';
