@@ -160,9 +160,9 @@ function fun2c2p_init()
                         if(!empty($strHtml)){
                             echo "<table>";
                             echo "<tr>";
-                            echo "<th style='width:200px;'>I'll use a new card</th>";
+                            echo "<th style='width:140px;'>Select my card</th>";
                             echo "<td> <select name='wc_2c2p_stored_card'>";                            
-                            echo "<option value='0'>Select Stored Card </option>";
+                            echo "<option value='0'>I'll use a new card</option>";
                             echo $strHtml;
                             echo "</select> </td> </tr> </table>";                            
                         }
@@ -173,7 +173,7 @@ function fun2c2p_init()
         
         //Receipt Page
         function receipt_page($order) {            
-            echo '<p><strong>' . __('Thank you for your order.', 'woo_2c2p') . '</strong><br/>' . __('The payment page will open if you click on button "Pay via 2C2P".', 'woo_2c2p') . '</p>';
+            /*echo '<p><strong>' . __('Thank you for your order.', 'woo_2c2p') . '</strong><br/>' . __('The payment page will open if you click on button "Pay via 2C2P".', 'woo_2c2p') . '</p>';*/
             echo $this->generate_2c2p_form($order);
         }
         
@@ -217,9 +217,14 @@ function fun2c2p_init()
 
             if (!$isValid) {                
                 foreach ($objWC_2C2P_Validation_Helper->wc_2c2p_error as $key => $value) {
-                    echo _e($value, 'woo_2c2p' );    
+                    echo _e($value, 'woo_2c2p');
                 }
+
+                echo "</br>";
+                echo _e('<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'woo_2c2p') . '</a>','woo_2c2p');
                 return;                            
+            }else{
+                echo '<p><strong>' . __('Thank you for your order.', 'woo_2c2p') . '</strong><br/>' . __('The payment page will open if you click on button "Pay via 2C2P".', 'woo_2c2p') . '</p>';
             }
             
             $fun2c2p_args['amount'] = $objWC_2C2P_Validation_Helper->wc_2c2p_validate_currency_exponent($fun2c2p_args['amount']);
@@ -254,38 +259,6 @@ function fun2c2p_init()
         function check_2c2p_response() {
 
             global $woocommerce;
-           /* $isFounded = false;
-
-            //Stored stored card toek into user meta table with loggedin users only.
-            if(is_user_logged_in()){
-                $stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
-                $stored_card_data = Array($_REQUEST['masked_pan']  => $_REQUEST['stored_card_unique_id']);
-
-                if(empty($stored_card)){
-                    
-
-                    if(!empty($_REQUEST['stored_card_unique_id'])){
-                        add_user_meta(get_current_user_id(), "wc_2c2p_stored_card", $stored_card_data);
-                    }
-                }
-                else{
-                    foreach ($stored_card as $key => $value) {
-                        foreach ($value as $innerKey => $innerValue) {
-                            if(array_key_exists('masked_pan',$_REQUEST) && array_key_exists('stored_card_unique_id',$_REQUEST)){
-                                if((strcasecmp($innerKey, $_REQUEST['masked_pan']) == 0 && strcasecmp($innerValue, $_REQUEST['stored_card_unique_id']) == 0)){
-                                    $isFounded = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if(!$isFounded) {
-                        if(!empty($_REQUEST['masked_pan']) && !empty($_REQUEST['stored_card_unique_id']))
-                            add_user_meta(get_current_user_id(), "wc_2c2p_stored_card", $stored_card_data);
-                    }
-                }
-            }*/
                             
             if (isset($_REQUEST['order_id']) && isset($_REQUEST['merchant_id'])) {
 
@@ -298,8 +271,7 @@ function fun2c2p_init()
                 if (!empty($order_id)) {
                     try {
                         $order = new WC_Order($order_id);
-                        $hash  = $_REQUEST['hash_value'];
-                        
+                        $hash  = $_REQUEST['hash_value'];                        
                         $status = $_REQUEST['payment_status'];                        
                         
                         $objwc_2c2p_is_valid_hash = new wc_2c2p_hash_helper();
@@ -319,9 +291,7 @@ function fun2c2p_init()
                                         $stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
                                         $stored_card_data = Array($_REQUEST['masked_pan']  => $_REQUEST['stored_card_unique_id']);
 
-                                        if(empty($stored_card)){
-                                            
-
+                                        if(empty($stored_card)){                                            
                                             if(!empty($_REQUEST['stored_card_unique_id'])){
                                                 add_user_meta(get_current_user_id(), "wc_2c2p_stored_card", $stored_card_data);
                                             }

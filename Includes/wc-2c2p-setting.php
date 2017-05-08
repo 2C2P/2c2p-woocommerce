@@ -36,7 +36,7 @@ return array(
     'key_secret' => array(
         'title' => __('Secret Key:', 'woo_2c2p'),
         'type' => 'text',
-        'description' => __('Given to Merchant by 2c2p team'),
+        'description' => __('Given to Secret Key by 2c2p team'),
         'desc_tip' => true
     ),    
     'test_mode' => array(
