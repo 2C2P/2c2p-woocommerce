@@ -220,10 +220,11 @@ function fun2c2p_init()
                     echo _e($value, 'woo_2c2p');
                 }
 
-                echo "</br>";
+                echo _e("</br>","woo_2c2p");
                 echo _e('<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'woo_2c2p') . '</a>','woo_2c2p');
-                return;                            
-            }else{
+                return;
+            }
+            else{
                 echo '<p><strong>' . __('Thank you for your order.', 'woo_2c2p') . '</strong><br/>' . __('The payment page will open if you click on button "Pay via 2C2P".', 'woo_2c2p') . '</p>';
             }
             
