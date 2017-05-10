@@ -74,11 +74,14 @@ class WC_2C2P_Validation_Helper{
 	//This function is used to validate the CurrencyExponent.
 	public function wc_2c2p_validate_currency_exponent($amount){
 
+		$objWC_2c2p_currency = new WC_2c2p_currency();
+
 		$exponent = 0;
 		$isFouned = false;
 
 		$currenyCode = $this->pg_2c2p_setting_values['wc_2c2p_currency'];
-		$currencyCodeArray = WC_2c2p_currency::$wc_2c2p_currency_code;
+		//$currencyCodeArray = WC_2c2p_currency::$wc_2c2p_currency_code;
+		$currencyCodeArray = $objWC_2c2p_currency->get_currency_code();
 
 		foreach ($currencyCodeArray as $key => $value) {
 			if($value['Num'] === $currenyCode){                        
@@ -94,7 +97,8 @@ class WC_2C2P_Validation_Helper{
 			}
 			else{
 
-				$pg_2c2p_exponent = WC_2c2p_currency::$wc_2c2p_exponent;
+				//$pg_2c2p_exponent = WC_2c2p_currency::$wc_2c2p_exponent;
+				$pg_2c2p_exponent = $objWC_2c2p_currency->get_currency_exponent();
 				$multi_value = $pg_2c2p_exponent[$exponent];
 
 				$amount = ($amount * $multi_value);

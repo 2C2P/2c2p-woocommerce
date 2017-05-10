@@ -28,10 +28,11 @@ function fun2c2p_init()
         //Make __construct()
         public function __construct(){
 
+            $objWC_2c2p_currency = new WC_2c2p_currency();
             
             $this->newValues = array();
             $this->newValues['0'] = "Select Cureency Code";
-            foreach (WC_2c2p_currency::$wc_2c2p_currency_code as $key => $value) {
+            foreach ($objWC_2c2p_currency->get_currency_code() as $key => $value) {
                 $this->newValues[$value['Num']] = $key;
             }
             

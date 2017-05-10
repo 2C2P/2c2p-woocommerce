@@ -78,7 +78,8 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $merchant_id    = esc_attr($this->pg_2c2p_setting_values['key_id']);
         $secret_key     = esc_attr($this->pg_2c2p_setting_values['key_secret']);
 
-        $currency       = $pg_2c2p_setting_values['wc_2c2p_currency'];
+        $currency       = $this->pg_2c2p_setting_values['wc_2c2p_currency'];
+
         $pay_category_id = "";
         $promotion      = "";
         $payment_description = $paymentBody['payment_description'];

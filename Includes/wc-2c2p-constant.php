@@ -6,7 +6,10 @@ class WC_2C2P_Constant{
 
 class WC_2c2p_currency{
 
-	public static $wc_2c2p_currency_code = array( 
+
+    public function get_currency_code(){
+
+        return array( 
         "CLF" => array ("Num" => "990","exponent" => "4",),
         "BHD" => array ("Num" => "048","exponent" => "3",),
         "IQD" => array ("Num" => "368","exponent" => "3",),
@@ -174,14 +177,17 @@ class WC_2c2p_currency{
         "XOF" => array ("Num" => "952","exponent" => "0",),
         "XPF" => array ("Num" => "953","exponent" => "0",),
         );
+    }
 
-public static $wc_2c2p_exponent = array(
-   "1" => "10",
-   "2" => "100",
-   "3" => "1000",
-   "4" => "10000",
-   "5" => "100000"
-   );
+    public function get_currency_exponent(){
+        return array(
+           "1" => "10",
+           "2" => "100",
+           "3" => "1000",
+           "4" => "10000",
+           "5" => "100000"
+           );    
+    }
 }
 
 ?>
