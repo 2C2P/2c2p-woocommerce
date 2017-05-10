@@ -192,12 +192,17 @@ function fun2c2p_init()
             else {
                 $service_provider = '2C2P';
             }
-            
-            $wc_2c2p_customer_id  = get_current_user_id();
-            $cust_email           = get_user_meta($wc_2c2p_customer_id, 'billing_email', true);
+    
+            if(is_user_logged_in()){
+                $wc_2c2p_customer_id  = get_current_user_id();
+                $cust_email           = get_user_meta($wc_2c2p_customer_id, 'billing_email', true);    
+            }
+            else{
+                $cust_email = $order->data['billing']['email'];
+            }
 
             $fun2c2p_args = array(
-                'payment_description'   => "V7 Test",
+                'payment_description'   => "Producat Description",
                 'order_id'              => $order_id,
                 'invoice_no'            => "invoice_".$order_id,
                 'amount'                => $order->total,                
@@ -230,8 +235,8 @@ function fun2c2p_init()
             
             $fun2c2p_args['amount'] = $objWC_2C2P_Validation_Helper->wc_2c2p_validate_currency_exponent($fun2c2p_args['amount']);
             
-            $objwc_2c2p_construct_request = new wc_2c2p_construct_request_helper();
-            $wc_2c2p_form_field = $objwc_2c2p_construct_request->wc_2c2p_construct_request($fun2c2p_args);
+            $objwc_2c2p_construct_request = new wc_2c2p_construct_request_helper();            
+            $wc_2c2p_form_field = $objwc_2c2p_construct_request->wc_2c2p_construct_request(is_user_logged_in(),$fun2c2p_args);
             
             $strHtml .= '<form action="' . $this->liveurl . '" method="post" id="2c2p_payment_form">';
             $strHtml .= $wc_2c2p_form_field;

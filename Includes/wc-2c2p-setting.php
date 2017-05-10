@@ -30,7 +30,7 @@ return array(
     'key_id' => array(
         'title' => __('Merchant ID:', 'woo_2c2p'),
         'type' => 'text',
-        'description' => __('Given to Merchant by 2C2P team'),
+        'description' => __('Given to Merchant ID by 2C2P team'),
         'desc_tip' => true
     ),    
     'key_secret' => array(
@@ -65,14 +65,14 @@ return array(
     'wc_2c2p_123_payment_expiry' => array(
         'title' => __('123 Payment Expiry (hours)', 'woo_2c2p'),
         'type' => 'text',
-        'description' => __('Please enter 123 Payment Expiry (hours) like (1-720 hr)', 'woo_2c2p'),
+        'description' => __('123 Payment Expiry in hours like (1-720)', 'woo_2c2p'),
         'desc_tip' => true,        
     ),
     'wc_2c2p_currency' => array(
         'title'        => __('Currency Code', 'woo_2c2p'),
         'type'         => 'select',
         'options'      => $this->newValues,
-        'description'  => __('Please select currency type from dropdown.', 'woo_2c2p'),
+        'description'  => __('2C2P currency code.', 'woo_2c2p'),
         'desc_tip'     => true,
         'class'        => 'wc-enhanced-select',
     ) 

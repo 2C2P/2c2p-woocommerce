@@ -35,17 +35,19 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         "statement_descriptor" => "",
         "hash_value" => "" );
     
-    public function wc_2c2p_construct_request($paymentBody)
+    public function wc_2c2p_construct_request($isloggedin,$paymentBody)
     {        
-        //$pg_2c2p_setting_values = $this->settings;        
-        if (strcasecmp($this->pg_2c2p_setting_values['wc_2c2p_stored_card_payment'], "yes") == 0) {
-            $enable_store_card = "Y";
-            //When user have stored_card_unique_id.
-            if (!empty($paymentBody['stored_card_unique_id'])) {
-                $this->wc_2c2p_form_fields["stored_card_unique_id"] = $paymentBody['stored_card_unique_id'];
+        //Check customer is logged in or not. If customer is logged in then pass stored card.
+        if($isloggedin){
+            if (strcasecmp($this->pg_2c2p_setting_values['wc_2c2p_stored_card_payment'], "yes") == 0) {
+                $enable_store_card = "Y";
+                //When user have stored_card_unique_id.
+                if (!empty($paymentBody['stored_card_unique_id'])) {
+                    $this->wc_2c2p_form_fields["stored_card_unique_id"] = $paymentBody['stored_card_unique_id'];
+                }
+                
+                $this->wc_2c2p_form_fields["enable_store_card"] = $enable_store_card;
             }
-            
-            $this->wc_2c2p_form_fields["enable_store_card"] = $enable_store_card;
         }        
         
         $this->wc_2c2p_123_payment_expiry($paymentBody);
@@ -105,7 +107,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $this->wc_2c2p_form_fields["user_defined_5"] = $user_defined_5;
         $this->wc_2c2p_form_fields["request_3ds"]    = "";
         $this->wc_2c2p_form_fields["result_url_1"]   = $result_url_1; // Specify by plugin
-        $this->wc_2c2p_form_fields["result_url_2"]   = $result_url_2; // Specify by plugin        
+        $this->wc_2c2p_form_fields["result_url_2"]   = $result_url_2; // Specify by plugin
     }
 
     function wc_2c2p_123_payment_expiry($paymentBody){
