@@ -1,7 +1,7 @@
 <?php
 /*
 
-Plugin Name: 2C2P-PG-woocommerce-plugin
+Plugin Name: 2C2P Redirect Payment
 Plugin URI: http://www.2c2p.com/
 Description: Transforming millions of everyday payments with one time card facility
 Version: 7.0.0
@@ -296,7 +296,7 @@ function fun2c2p_init()
                                     //Stored stored card toek into user meta table with loggedin users only.
                                     if(is_user_logged_in()){
                                         $stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
-                                        $stored_card_data = Array($_REQUEST['masked_pan']  => $_REQUEST['stored_card_unique_id']);
+                                        $stored_card_data = array($_REQUEST['masked_pan']  => $_REQUEST['stored_card_unique_id']);
 
                                         if(empty($stored_card)){                                            
                                             if(!empty($_REQUEST['stored_card_unique_id'])){
