@@ -78,7 +78,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $merchant_id    = esc_attr($this->pg_2c2p_setting_values['key_id']);
         $secret_key     = esc_attr($this->pg_2c2p_setting_values['key_secret']);
 
-        $currency       = $this->pg_2c2p_setting_values['wc_2c2p_currency'];
+        $currency       = $this->wc_2c2p_get_store_currency_code(); // Get is store currency code from woocommerece.
 
         $pay_category_id = "";
         $promotion      = "";
@@ -120,6 +120,18 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $payment_expiry = $date->format("Y-m-d H:i:s");
 
         $this->wc_2c2p_form_fields["payment_expiry"] = $payment_expiry;
+    }
+
+    //Get the store currency code.
+    function wc_2c2p_get_store_currency_code(){
+        $objWC_2c2p_currency = new WC_2c2p_currency();
+        $currenyCode = get_option('woocommerce_currency');
+
+        foreach ($objWC_2c2p_currency->get_currency_code() as $key => $value) {
+            if($key === $currenyCode){                
+                return  $value['Num'];                
+            }
+        }
     }
 }
 

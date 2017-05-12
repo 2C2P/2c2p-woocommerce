@@ -28,14 +28,6 @@ function fun2c2p_init()
         //Make __construct()
         public function __construct(){
 
-            $objWC_2c2p_currency = new WC_2c2p_currency();
-            
-            $this->newValues = array();
-            $this->newValues['0'] = "Select Cureency Code";
-            foreach ($objWC_2c2p_currency->get_currency_code() as $key => $value) {
-                $this->newValues[$value['Num']] = $key;
-            }
-            
             $this->id                 = '2c2p'; // ID for WC to associate the gateway values
             $this->method_title       = '2C2P'; // Gateway Title as seen in Admin Dashboad
             $this->method_description = '2C2P - Redefining Payments, Simplifying Lives'; // Gateway Description as seen in Admin Dashboad
@@ -74,8 +66,6 @@ function fun2c2p_init()
                 add_action('woocommerce_update_options_payment_gateways', array(&$this,'process_admin_options')); // WC-1.6.6
             }
 
-            //add_filter('woocommerce_settings_api_sanitized_fields_' . $this->id, array(&$this, 'wc_2c2p_sanitize_settings'));            
-
         } //END-__construct    
 
         //Validating 123 payment expiry textbox
@@ -91,16 +81,6 @@ function fun2c2p_init()
             else if(!($value > 0 && $value <= 720)){
                 WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in between 1 - 720 hours only', 'woo_2c2p'));
                 return $value = 0; 
-            }
-
-            return $value;
-        }
-
-        //Validating currency code textbox.
-        public function validate_wc_2c2p_currency_field( $key, $value ) {
-            if(strcasecmp($value, "0") == 0){
-                WC_Admin_Settings::add_error( esc_html__( 'Please select currency code.', 'woo_2c2p'));
-                return $value = 0;
             }
 
             return $value;
@@ -194,12 +174,12 @@ function fun2c2p_init()
                 $service_provider = '2C2P';
             }
     
-            if(is_user_logged_in()){
+            if(is_user_logged_in()){ // Customer is loggedin.
                 $wc_2c2p_customer_id  = get_current_user_id();
                 $cust_email           = get_user_meta($wc_2c2p_customer_id, 'billing_email', true);    
             }
             else{
-                $cust_email = $order->data['billing']['email'];
+                $cust_email = $order->data['billing']['email']; //Gust customer.
             }
 
             $fun2c2p_args = array(

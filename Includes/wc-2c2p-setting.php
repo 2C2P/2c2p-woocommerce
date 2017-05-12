@@ -2,21 +2,21 @@
 
 return array(    
     'enabled' => array(
-        'title' => __('Enable/Disable:', 'woo_2c2p'),
+        'title' => __('Enable/Disable', 'woo_2c2p'),
         'type' => 'checkbox',
         'label' => __('Enable 2c2p', 'woo_2c2p'),
         'default' => 'no',
         'description' => 'If ticked, It will show in the Payment List as a payment option'
     ),    
     'title' => array(
-        'title' => __('Title:', 'woo_2c2p'),
+        'title' => __('Title', 'woo_2c2p'),
         'type' => 'text',
         'default' => __('2C2P Payment', 'woo_2c2p'),
         'description' => __('This controls the title which the user sees during checkout.', 'woo_2c2p'),
         'desc_tip' => true
     ),    
     'description' => array(
-        'title' => __('Description:', 'woo_2c2p'),
+        'title' => __('Description', 'woo_2c2p'),
         'type' => 'textarea',
         'default' => __('Pay securely by Credit or Debit card or internet banking through 2C2P.', 'woo_2c2p'),
         'description' => __('This controls the description which the user sees during checkout.', 'woo_2c2p'),
@@ -28,19 +28,19 @@ return array(
         'description' => '',
     ),
     'key_id' => array(
-        'title' => __('Merchant ID:', 'woo_2c2p'),
+        'title' => __('Merchant ID', 'woo_2c2p'),
         'type' => 'text',
         'description' => __('Given to Merchant ID by 2C2P team'),
         'desc_tip' => true
     ),    
     'key_secret' => array(
-        'title' => __('Secret Key:', 'woo_2c2p'),
+        'title' => __('Secret Key', 'woo_2c2p'),
         'type' => 'text',
         'description' => __('Given to Secret Key by 2c2p team'),
         'desc_tip' => true
     ),    
     'test_mode' => array(
-        'title' => __('Mode:', 'woo_2c2p'),
+        'title' => __('Mode', 'woo_2c2p'),
         'type' => 'select',
         'label' => __('2c2p Tranasction Mode.', 'woo_2c2p'),    
         'default' => 'test',
@@ -68,13 +68,5 @@ return array(
         'description' => __('123 Payment Expiry in hours like (1-720)', 'woo_2c2p'),
         'desc_tip' => true,        
     ),
-    'wc_2c2p_currency' => array(
-        'title'        => __('Currency Code', 'woo_2c2p'),
-        'type'         => 'select',
-        'options'      => $this->newValues,
-        'description'  => __('2C2P currency code.', 'woo_2c2p'),
-        'desc_tip'     => true,
-        'class'        => 'wc-enhanced-select',
-    ) 
 );
 ?> 

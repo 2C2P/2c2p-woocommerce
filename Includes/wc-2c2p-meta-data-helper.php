@@ -9,7 +9,7 @@ class WC_2C2P_Meta_Data_Helper{
 
 		$order_id = $parameter['order_id'];
 
-		update_post_meta($order_id, 'wc_2c2p_order_id_meta', $order_id);
+		update_post_meta($order_id, 'wc_2c2p_order_id_meta', $order_id);		
 
 		if(array_key_exists('version',$parameter)) 
 			update_post_meta($order_id, 'wc_2c2p_version_meta', $parameter['version']);

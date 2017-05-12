@@ -8,7 +8,7 @@ class WC_2C2P_Validation_Helper{
 		"payment_description" 	=> "",
 		"order_id" 				=> "",			
 		"amount" 				=> "",
-		"currency"				=> "",
+		//"currency"				=> "",
 		);
 
 	function __construct() {
@@ -50,18 +50,11 @@ class WC_2C2P_Validation_Helper{
 				$this->wc_2c2p_error['amount'] = "Amount is limited to 12 character.";
 			}
 			else{
-					//Calculate currenycy by methods.
+				//Calculate currenycy by methods.
 				if(!is_numeric($parameter['amount'])){
 					$this->wc_2c2p_error['amount'] = "Please enter amount is digit's.";
-				}
-				else{
-					$this->wc_2c2p_validate_currency_exponent($parameter['amount']);
-				}
+				}				
 			}
-		}
-
-		if(strcasecmp($this->pg_2c2p_setting_values['wc_2c2p_currency'], "0") == 0){			
-			$this->wc_2c2p_error['currency'] = "Currency code is not selected. Please try to contact your website admin.";
 		}
 
 		foreach ($this->wc_2c2p_error as $key => $value) {
@@ -79,12 +72,12 @@ class WC_2C2P_Validation_Helper{
 		$exponent = 0;
 		$isFouned = false;
 
-		$currenyCode = $this->pg_2c2p_setting_values['wc_2c2p_currency'];
-		//$currencyCodeArray = WC_2c2p_currency::$wc_2c2p_currency_code;
+		$currenyCode = get_option('woocommerce_currency');
+
 		$currencyCodeArray = $objWC_2c2p_currency->get_currency_code();
 
 		foreach ($currencyCodeArray as $key => $value) {
-			if($value['Num'] === $currenyCode){                        
+			if($key === $currenyCode){				
 				$exponent = $value['exponent'];
 				$isFouned = true;
 				break;
@@ -92,15 +85,12 @@ class WC_2C2P_Validation_Helper{
 		}
 
 		if($isFouned){
-			if($exponent == 0){
+			if($exponent == 0 || empty($exponent)){
 				$amount = (int) $amount;
 			}
-			else{
-
-				//$pg_2c2p_exponent = WC_2c2p_currency::$wc_2c2p_exponent;
+			else{		
 				$pg_2c2p_exponent = $objWC_2c2p_currency->get_currency_exponent();
 				$multi_value = $pg_2c2p_exponent[$exponent];
-
 				$amount = ($amount * $multi_value);
 			}
 
