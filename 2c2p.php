@@ -1,6 +1,5 @@
 <?php
 /*
-
 Plugin Name: 2C2P Redirect Payment
 Plugin URI: http://www.2c2p.com/
 Description: Transforming millions of everyday payments with one time card facility
@@ -71,16 +70,16 @@ function fun2c2p_init()
         //Validating 123 payment expiry textbox
         public function validate_wc_2c2p_123_payment_expiry_field( $key, $value ) {
             if (empty($value)) {
-                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry like (1 - 720).', 'woo_2c2p'));
+                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry like (8 - 720)', 'woo_2c2p'));
                 return $value = 0;
             }
             else if(!is_numeric($value)){
-                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in numeric like (1 - 720)', 'woo_2c2p'));
-                return $value = 0;   
+                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in numeric like (8 - 720)', 'woo_2c2p'));
+                return $value = 0;
             }
-            else if(!($value > 0 && $value <= 720)){
-                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in between 1 - 720 hours only', 'woo_2c2p'));
-                return $value = 0; 
+            else if(!($value > 8 && $value <= 720)){
+                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in between 8 - 720 hours only', 'woo_2c2p'));
+                return $value = 0;
             }
 
             return $value;
