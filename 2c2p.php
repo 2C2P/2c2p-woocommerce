@@ -85,6 +85,22 @@ function fun2c2p_init()
             return $value;
         }
 
+        public function validate_key_id_field( $key, $value ) {
+            if (empty($value)) {
+                WC_Admin_Settings::add_error( esc_html__( 'Please Enter Merchant Id', 'woo_2c2p'));
+                return $value;
+            }
+            return $value;
+        }
+
+         public function validate_key_secret_field( $key, $value ) {
+            if (empty($value)) {
+                WC_Admin_Settings::add_error( esc_html__( 'Please Enter Secret Key', 'woo_2c2p'));
+                return $value;
+            }
+            return $value;
+        }
+
         function wc_2c2p_custom_checkout_field_update_order_meta($order_id){
             if ($_POST['wc_2c2p_stored_card'] != 0) {
                 update_post_meta($order_id, 'wc_2c2p_stored_card_token_id', $_POST['wc_2c2p_stored_card']);
