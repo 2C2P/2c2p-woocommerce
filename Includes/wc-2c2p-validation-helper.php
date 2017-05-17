@@ -2,8 +2,6 @@
 
 class WC_2C2P_Validation_Helper{
 
-	private $pg_2c2p_setting_values;
-
 	public $wc_2c2p_error = array(		    
 		"payment_description" 	=> "",
 		"order_id" 				=> "",			
@@ -11,10 +9,7 @@ class WC_2C2P_Validation_Helper{
 		//"currency"				=> "",
 		);
 
-	function __construct() {
-		$objWC_Gateway_2c2p = new WC_Gateway_2c2p();
-		$this->pg_2c2p_setting_values = $objWC_Gateway_2c2p->wc_2c2p_get_setting();
-	}
+	function __construct() { }
 
 	function wc_2c2p_is_valid_merchant_request($parameter){
 
@@ -27,17 +22,9 @@ class WC_2C2P_Validation_Helper{
 		if(empty($parameter['amount'])){
 			$this->wc_2c2p_error['amount'] = "Amount cannot be blank.";
 		}
-
-		if(!empty($parameter['order_id'])){
-			if(strcasecmp($parameter['payment_option'], '1') == 0){
-				if(strlen($parameter['order_id']) > 12){
-					$this->wc_2c2p_error['order_id'] = "Order id is limited to 12 character when payment option is 123.";
-				}					
-			}
-			else{
-				if(strlen($parameter['order_id']) > 20){
-					$this->wc_2c2p_error['order_id'] = "Order id is limited to 20 character.";
-				}	
+		if(!empty($parameter['order_id'])){		
+			if(strlen($parameter['order_id']) > 20){
+				$this->wc_2c2p_error['order_id'] = "Order id is limited to 20 character.";
 			}
 		}
 		if(!empty($parameter['amount'])){
@@ -73,7 +60,6 @@ class WC_2C2P_Validation_Helper{
 		$isFouned = false;
 
 		$currenyCode = get_option('woocommerce_currency');
-
 		$currencyCodeArray = $objWC_2c2p_currency->get_currency_code();
 
 		foreach ($currencyCodeArray as $key => $value) {
@@ -99,6 +85,5 @@ class WC_2C2P_Validation_Helper{
 		return $amount;
 	}
 }
-
 
 ?>
