@@ -190,8 +190,8 @@ function fun2c2p_init()
             }
     
             if(is_user_logged_in()){ // Customer is loggedin.
-                $wc_2c2p_customer_id  = get_current_user_id();
-                $cust_email           = get_user_meta($wc_2c2p_customer_id, 'billing_email', true);    
+                $loggedin_user_data = wp_get_current_user();                
+                $cust_email         = $loggedin_user_data->data->user_email;    
             }
             else{
                 $cust_email = $order->data['billing']['email']; //Gust customer.
