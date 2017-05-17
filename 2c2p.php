@@ -77,7 +77,7 @@ function fun2c2p_init()
                 WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in numeric like (8 - 720)', 'woo_2c2p'));
                 return $value = 0;
             }
-            else if(!($value > 8 && $value <= 720)){
+            else if(!($value >= 8 && $value <= 720)){
                 WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in between 8 - 720 hours only', 'woo_2c2p'));
                 return $value = 0;
             }

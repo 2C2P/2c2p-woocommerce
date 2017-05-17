@@ -65,7 +65,7 @@ return array(
     'wc_2c2p_123_payment_expiry' => array(
         'title' => __('123 Payment Expiry (hours)', 'woo_2c2p'),
         'type' => 'text',
-        'description' => __('123 Payment Expiry in hours like (1-720)', 'woo_2c2p'),
+        'description' => __('123 Payment Expiry in hours like (8-720)', 'woo_2c2p'),
         'desc_tip' => true,        
     ),
 );
