@@ -18,7 +18,7 @@ return array(
     'description' => array(
         'title' => __('Description', 'woo_2c2p'),
         'type' => 'textarea',
-        'default' => __('Pay securely by Credit or Debit card or internet banking through 2C2P.', 'woo_2c2p'),
+        'default' => __('Pay Securely by Credit/Debit card or Internet banking through 2C2P.', 'woo_2c2p'),
         'description' => __('This controls the description which the user sees during checkout.', 'woo_2c2p'),
         'desc_tip' => true
     ),    

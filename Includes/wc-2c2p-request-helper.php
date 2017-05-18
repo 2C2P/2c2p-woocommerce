@@ -95,7 +95,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $this->wc_2c2p_form_fields["merchant_id"] = $merchant_id;
         $this->wc_2c2p_form_fields["payment_description"] = $payment_description;
         $this->wc_2c2p_form_fields["order_id"] = $order_id;
-        $this->wc_2c2p_form_fields["invoice_no1"] = $invoice_no;
+        $this->wc_2c2p_form_fields["invoice_no"] = $invoice_no;
         $this->wc_2c2p_form_fields["currency"] = $currency;
         $this->wc_2c2p_form_fields["amount"] = $amount;
         $this->wc_2c2p_form_fields["customer_email"] = $customer_email;

@@ -40,7 +40,7 @@ function fun2c2p_init()
             $test_description = '';
             if (strcasecmp($this->settings['test_mode'], 'demo2') == 0 ) {
                 $demo             = '2C2PFrontEnd/';
-                $test_description = '<br/><br/><u>Test Mode is <strong>ACTIVE</strong>, Do not use personal detail to pay. Use only test detail for payment </u><br/>';
+                $test_description = '<br/><br/>Test Mode is <strong>ACTIVE</strong>, Do not use personal detail to pay. Use only test detail for payment<br/>';
             } else {
                 $demo = '';
             }
@@ -169,7 +169,6 @@ function fun2c2p_init()
         
         //Receipt Page
         function receipt_page($order) {            
-            /*echo '<p><strong>' . __('Thank you for your order.', 'woo_2c2p') . '</strong><br/>' . __('The payment page will open if you click on button "Pay via 2C2P".', 'woo_2c2p') . '</p>';*/
             echo $this->generate_2c2p_form($order);
         }
         
@@ -198,9 +197,9 @@ function fun2c2p_init()
             }
 
             $fun2c2p_args = array(
-                'payment_description'   => "Producat Description",
+                'payment_description'   => "product Description",
                 'order_id'              => $order_id,
-                'invoice_no'            => "invoice_".$order_id,
+                'invoice_no'            => $order_id,
                 'amount'                => $order->total,                
                 'customer_email'        => $cust_email,
                 'pay_category_id'       => "",
@@ -222,7 +221,7 @@ function fun2c2p_init()
                 }
 
                 echo _e("</br>","woo_2c2p");
-                echo _e('<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'woo_2c2p') . '</a>','woo_2c2p');
+                echo _e('&nbsp;&nbsp;&nbsp;&nbsp<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'woo_2c2p') . '</a>','woo_2c2p');
                 return;
             }
             else{
@@ -237,7 +236,7 @@ function fun2c2p_init()
             $strHtml .= '<form action="' . $this->liveurl . '" method="post" id="2c2p_payment_form">';
             $strHtml .= $wc_2c2p_form_field;
             $strHtml .= '<input type="submit" class="button-alt" id="submit_2c2p_payment_form" value="' . __('Pay via 2C2P', 'woo_2c2p') . '" />';
-            $strHtml .= '<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'woo_2c2p') . '</a>';
+            $strHtml .= '&nbsp;&nbsp;&nbsp;&nbsp<a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'woo_2c2p') . '</a>';
             $strHtml .= '</form>';
             
             return $strHtml;
@@ -278,15 +277,13 @@ function fun2c2p_init()
                         $trans_authorised = false;
                         
                         if ($order->status !== 'completed') {
-
+                                                
                             if ($isValidHash) {
-
                                 //Save data to meta data table.
                                 $objWC_2C2P_Meta_Data_Helper = new WC_2C2P_Meta_Data_Helper();
                                 $objWC_2C2P_Meta_Data_Helper-> wc_2c2p_store_response_meta($_REQUEST);
 
-                                if (strcasecmp($status, "000") == 0) { //Success payment.
-
+                                if (strcasecmp($status, "000") == 0) { //Success payment.                            
                                     $isFounded = false;
 
                                     //Stored stored card toek into user meta table with loggedin users only.
@@ -321,13 +318,14 @@ function fun2c2p_init()
                                     $this->msg['message'] = "Thank you for shopping with us. Your account has been charged and your transaction is successful.";
                                     $this->msg['class']   = 'woocommerce-message';
                                     
-                                    if ( strcasecmp($order->status, 'processing') == 0) {
+                                    if (strcasecmp($order->status, 'processing') == 0) {
                                         $order->add_order_note('order_id: ' . $_REQUEST['order_id'] . '<br/>transaction_ref: ' . $_REQUEST['transaction_ref'] . '<br/>payment status: ' . $_REQUEST['payment_status'] . '<br/>amount: ' . $_REQUEST['amount'] . '<br/>eci: ' . $_REQUEST['eci'] . '<br/>transaction_datetime: ' . $_REQUEST['transaction_datetime'] . '<br/>approval_code: ' . $_REQUEST['approval_code']);
-                                        $order->update_status('Completed');
+                                        $order->update_status('completed');                                        
                                     } else {
+                                        $order->update_status('completed');                                        
                                         $order->payment_complete();
                                         $order->add_order_note('2C2P payment transaction successful.<br/>order_id: ' . $_REQUEST['order_id'] . '<br/>transaction_ref: ' . $_REQUEST['transaction_ref'] . '<br/>eci: ' . $_REQUEST['eci'] . '<br/>transaction_datetime: ' . $_REQUEST['transaction_datetime'] . '<br/>approval_code: ' . $_REQUEST['approval_code']);
-                                        $woocommerce->cart->empty_cart();
+                                        $woocommerce->cart->empty_cart();                                        
                                     }
                                 } 
                                 else if (strcasecmp($status, "001") == 0) {
