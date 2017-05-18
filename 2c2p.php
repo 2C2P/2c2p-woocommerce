@@ -266,10 +266,6 @@ function fun2c2p_init()
 
                 $order_id = $_REQUEST['order_id'];
                 
-                //Save data to meta data table.
-                $objWC_2C2P_Meta_Data_Helper = new WC_2C2P_Meta_Data_Helper();
-                $objWC_2C2P_Meta_Data_Helper-> wc_2c2p_store_response_meta($_REQUEST);
-                
                 if (!empty($order_id)) {
                     try {
                         $order = new WC_Order($order_id);
@@ -284,6 +280,11 @@ function fun2c2p_init()
                         if ($order->status !== 'completed') {
 
                             if ($isValidHash) {
+
+                                //Save data to meta data table.
+                                $objWC_2C2P_Meta_Data_Helper = new WC_2C2P_Meta_Data_Helper();
+                                $objWC_2C2P_Meta_Data_Helper-> wc_2c2p_store_response_meta($_REQUEST);
+
                                 if (strcasecmp($status, "000") == 0) { //Success payment.
 
                                     $isFounded = false;
