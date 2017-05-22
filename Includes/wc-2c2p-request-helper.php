@@ -27,6 +27,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         "user_defined_5" => "",
         "result_url_1" => "",
         "result_url_2" => "",
+        "payment_option" => "",
         "enable_store_card" => "",
         "stored_card_unique_id" => "",        
         "request_3ds"   => "",
@@ -109,6 +110,8 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $this->wc_2c2p_form_fields["request_3ds"]    = "";
         $this->wc_2c2p_form_fields["result_url_1"]   = $result_url_1; // Specify by plugin
         $this->wc_2c2p_form_fields["result_url_2"]   = $result_url_2; // Specify by plugin
+        $this->wc_2c2p_form_fields["payment_option"]   = "A"; // Pass by default Payment option as A
+        
     }
 
     function wc_2c2p_123_payment_expiry($paymentBody){
