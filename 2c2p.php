@@ -195,9 +195,21 @@ function fun2c2p_init()
             else{
                 $cust_email = $order->data['billing']['email']; //Gust customer.
             }
+            
+            $item_count = count($order->get_items());
+            $current_count = 0;
+            foreach($order->get_items() as $item){                
+                $product_name .= $item['name'];
+                $current_count++;
+
+                if($item_count !== $current_count)
+                    $product_name .= ',';                
+            }
+
+            $product_name .= '.';
 
             $fun2c2p_args = array(
-                'payment_description'   => "product Description",
+                'payment_description'   => $product_name,
                 'order_id'              => $order_id,
                 'invoice_no'            => $order_id,
                 'amount'                => $order->total,                
@@ -268,6 +280,7 @@ function fun2c2p_init()
                 if (!empty($order_id)) {
                     try {
                         $order = new WC_Order($order_id);
+                
                         $hash  = $_REQUEST['hash_value'];                        
                         $status = $_REQUEST['payment_status'];                        
                         
@@ -287,13 +300,13 @@ function fun2c2p_init()
                                     $isFounded = false;
 
                                     //Stored stored card toek into user meta table with loggedin users only.
-                                    if(is_user_logged_in()){
-                                        $stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
+                                    if(is_user_logged_in() || $order->user_id > 0 ){
+                                        $stored_card = get_user_meta($order->user_id,"wc_2c2p_stored_card");
                                         $stored_card_data = array($_REQUEST['masked_pan']  => $_REQUEST['stored_card_unique_id']);
 
                                         if(empty($stored_card)){                                            
                                             if(!empty($_REQUEST['stored_card_unique_id'])){
-                                                add_user_meta(get_current_user_id(), "wc_2c2p_stored_card", $stored_card_data);
+                                                add_user_meta($order->user_id, "wc_2c2p_stored_card", $stored_card_data);
                                             }
                                         }
                                         else{
@@ -309,7 +322,7 @@ function fun2c2p_init()
                                             }
                                             if(!$isFounded) {
                                                 if(!empty($_REQUEST['masked_pan']) && !empty($_REQUEST['stored_card_unique_id']))
-                                                    add_user_meta(get_current_user_id(), "wc_2c2p_stored_card", $stored_card_data);
+                                                    add_user_meta($order->user_id, "wc_2c2p_stored_card", $stored_card_data);
                                             }
                                         }
                                     } 
