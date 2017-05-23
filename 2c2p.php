@@ -3,7 +3,7 @@
 Plugin Name: 2C2P Redirect Payment
 Plugin URI: http://www.2c2p.com/
 Description: Transforming millions of everyday payments with one time card facility
-Version: 7.0.0
+Version: 7.0
 Author: 2C2P 
 Author URI: http://www.2c2p.com/
 Contributors: 2C2P Payment Solution
@@ -40,7 +40,7 @@ function fun2c2p_init()
             $test_description = '';
             if (strcasecmp($this->settings['test_mode'], 'demo2') == 0 ) {
                 $demo             = '2C2PFrontEnd/';
-                $test_description = '<br/><br/>Test Mode is <strong>ACTIVE</strong>, Do not use personal detail to pay. Use only test detail for payment<br/>';
+                $test_description = '<br/><br/>Test Mode is <strong>ACTIVE</strong>, Do not use personal detail to pay. Use only test detail for payment.<br/>';
             } else {
                 $demo = '';
             }
@@ -333,12 +333,13 @@ function fun2c2p_init()
                                     
                                     if (strcasecmp($order->status, 'processing') == 0) {
                                         $order->add_order_note('order_id: ' . $_REQUEST['order_id'] . '<br/>transaction_ref: ' . $_REQUEST['transaction_ref'] . '<br/>payment status: ' . $_REQUEST['payment_status'] . '<br/>amount: ' . $_REQUEST['amount'] . '<br/>eci: ' . $_REQUEST['eci'] . '<br/>transaction_datetime: ' . $_REQUEST['transaction_datetime'] . '<br/>approval_code: ' . $_REQUEST['approval_code']);
-                                        $order->update_status('completed');                                        
-                                    } else {
+                                        $order->update_status('completed');
+                                    } 
+                                    else {
                                         $order->update_status('completed');                                        
                                         $order->payment_complete();
                                         $order->add_order_note('2C2P payment transaction successful.<br/>order_id: ' . $_REQUEST['order_id'] . '<br/>transaction_ref: ' . $_REQUEST['transaction_ref'] . '<br/>eci: ' . $_REQUEST['eci'] . '<br/>transaction_datetime: ' . $_REQUEST['transaction_datetime'] . '<br/>approval_code: ' . $_REQUEST['approval_code']);
-                                        $woocommerce->cart->empty_cart();                                        
+                                        $woocommerce->cart->empty_cart();
                                     }
                                 } 
                                 else if (strcasecmp($status, "001") == 0) {
@@ -348,12 +349,14 @@ function fun2c2p_init()
                                     $order->add_order_note('2C2P payment status is pending<br/>order_id: ' . $_REQUEST['order_id'] . '<br/>transaction_ref: ' . $_REQUEST['transaction_ref'] . '<br/>eci: ' . $_REQUEST['eci'] . '<br/>transaction_datetime: ' . $_REQUEST['transaction_datetime'] . '<br/>approval_code: ' . $_REQUEST['approval_code']);
                                     $order->update_status('on-hold');
                                     $woocommerce->cart->empty_cart();
-                                } else {
+                                } 
+                                else {
                                     $this->msg['class']   = 'woocommerce-error';
                                     $this->msg['message'] = "Thank you for shopping with us. However, the transaction has been declined.";
                                     $order->add_order_note('order_id: ' . $_REQUEST['order_id'] . '<br/>transaction_ref: ' . $_REQUEST['transaction_ref'] . '<br/>eci: ' . $_REQUEST['eci'] . '<br/>transaction_datetime: ' . $_REQUEST['transaction_datetime'] . '<br/>approval_code: ' . $_REQUEST['approval_code']);
                                 }
-                            } else {
+                            } 
+                            else {
                                 $this->msg['class']   = 'error';
                                 $this->msg['message'] = "Security Error. Illegal access detected.";
                                 $order->add_order_note('Checksum ERROR: ' . json_encode($_REQUEST));
