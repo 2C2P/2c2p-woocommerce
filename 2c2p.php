@@ -56,8 +56,11 @@ function fun2c2p_init()
             add_action('init', array(&$this,'check_2c2p_response'));
             add_action('woocommerce_api_' . strtolower(get_class($this)), array($this,'check_2c2p_response')); //update for woocommerce >2.0
             add_action('woocommerce_receipt_2c2p', array(&$this,'receipt_page'));
-            add_action('woocommerce_checkout_update_order_meta', array(&$this,'wc_2c2p_custom_checkout_field_update_order_meta'));
-            
+            add_action('woocommerce_checkout_update_order_meta', array(&$this,'wc_2c2p_custom_checkout_field_update_order_meta'));            
+
+            //Load script's
+            add_action('wp_enqueue_scripts', array( &$this, 'wc_2c2p_load_scripts'));
+
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this,'process_admin_options')); //update for woocommerce >2.0
             } 
@@ -102,9 +105,14 @@ function fun2c2p_init()
         }
 
         function wc_2c2p_custom_checkout_field_update_order_meta($order_id){
-            if ($_POST['wc_2c2p_stored_card'] != 0) {
+            if ($_POST['wc_2c2p_stored_card'] != 0) {                
                 update_post_meta($order_id, 'wc_2c2p_stored_card_token_id', $_POST['wc_2c2p_stored_card']);
             }
+        }
+
+        //load script for 2c2p payment.
+        function wc_2c2p_load_scripts(){            
+            wp_enqueue_script('wc-2c2p-scripts', plugin_dir_url( __FILE__ ) . 'Includes/wc-2c2p-script.js',array('jquery'));            
         }
 
         public function wc_2c2p_get_setting(){
@@ -146,22 +154,28 @@ function fun2c2p_init()
                 if(is_user_logged_in()){
                     if(strcasecmp($this->settings['wc_2c2p_stored_card_payment'], "yes") == 0){
                         $strHtml = "";
-                        $wc_2c2p_stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
-
-                        foreach ($wc_2c2p_stored_card as $key => $value) {
+                        $wc_2c2p_stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");                        
+                        foreach ($wc_2c2p_stored_card as $key => $value) {                            
                             foreach ($value as $innerKey => $innerValue) {
-                                $strHtml .= "<option value='".$innerValue ."'>".$innerKey ."</option>";
+                                $strHtml .= "<option value='".key($value) ."'>".key($innerValue)."</option>";
                             }
                         }
+
                         if(!empty($strHtml)){
-                            echo "<table>";
+                            echo "<table id='tblToken'>";
                             echo "<tr>";
                             echo "<th style='width:140px;'>Select my card</th>";
-                            echo "<td> <select name='wc_2c2p_stored_card'>";                            
+                            echo "<td> <select id='wc_2c2p_stored_card' name='wc_2c2p_stored_card' >";                            
                             echo "<option value='0'>I'll use a new card</option>";
                             echo $strHtml;
-                            echo "</select> </td> </tr> </table>";                            
-                        }
+                            echo "</select></td>";
+                            echo "<td><input type='button' name='btn1' value='Remove Card' onclick='doTokenRemove();' ></td>";
+                            echo "</tr>";
+                            //echo "<tr><td colspan='3'><p id='wc_2c2p_message'></p></td>";
+                            echo "</table>";                            
+                        }  
+
+                        echo "<input type='hidden' value='".admin_url('admin-ajax.php') ."' id='ajax_url' />";                                
                     }
                 }
             }
@@ -175,7 +189,21 @@ function fun2c2p_init()
         //Generate button link
         function generate_2c2p_form($order_id) {
 
-            $wc_2c2p_stored_card_token_id = get_post_meta($order_id, 'wc_2c2p_stored_card_token_id', true);
+            $wc_2c2p_stored_card_token_id = 0;
+
+            if(is_user_logged_in()){                
+                $wc_2c2p_token_id = get_post_meta($order_id, 'wc_2c2p_stored_card_token_id', true);
+                $wc_2c2p_stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
+
+                foreach ($wc_2c2p_stored_card as $key => $value) {
+                    foreach ($value as $innerKey => $innerValue) {
+                        if(strcasecmp(key($value), $wc_2c2p_token_id) == 0){
+                            $wc_2c2p_stored_card_token_id = $innerValue[key($innerValue)];
+                            break;
+                        }
+                    }
+                }
+            }        
 
             global $woocommerce;
             $order = new WC_Order( $order_id );
@@ -302,7 +330,9 @@ function fun2c2p_init()
                                     //Stored stored card toek into user meta table with loggedin users only.
                                     if(is_user_logged_in() || $order->user_id > 0 ){
                                         $stored_card = get_user_meta($order->user_id,"wc_2c2p_stored_card");
-                                        $stored_card_data = array($_REQUEST['masked_pan']  => $_REQUEST['stored_card_unique_id']);
+
+                                        $stored_card_data = array($_REQUEST['order_id'] => 
+                                                            array($_REQUEST['masked_pan']  => $_REQUEST['stored_card_unique_id']));
 
                                         if(empty($stored_card)){                                            
                                             if(!empty($_REQUEST['stored_card_unique_id'])){
@@ -311,15 +341,16 @@ function fun2c2p_init()
                                         }
                                         else{
                                             foreach ($stored_card as $key => $value) {
-                                                foreach ($value as $innerKey => $innerValue) {
+                                                foreach ($value as $innerKey => $innerValue) {                                                    
                                                     if(array_key_exists('masked_pan',$_REQUEST) && array_key_exists('stored_card_unique_id',$_REQUEST)){
-                                                        if((strcasecmp($innerKey, $_REQUEST['masked_pan']) == 0 && strcasecmp($innerValue, $_REQUEST['stored_card_unique_id']) == 0)){
+                                                        if((strcasecmp(Key($innerValue), $_REQUEST['masked_pan']) == 0 && strcasecmp($innerValue[key($innerValue)], $_REQUEST['stored_card_unique_id']) == 0)){
                                                             $isFounded = true;
                                                             break;
                                                         }
                                                     }
                                                 }
-                                            }
+                                            }                                        
+
                                             if(!$isFounded) {
                                                 if(!empty($_REQUEST['masked_pan']) && !empty($_REQUEST['stored_card_unique_id']))
                                                     add_user_meta($order->user_id, "wc_2c2p_stored_card", $stored_card_data);
@@ -392,11 +423,31 @@ function fun2c2p_init()
             }
         }
 
-        public function thanku_page() { }
+        public function thanku_page() { }    
         
     } //END-class
     
-    
+    add_action('wp_ajax_paymentajax', 'wp_2c2p_remove_stored_card_Id_ajax');
+    add_action('wp_ajax_nopriv_paymentajax', 'wp_2c2p_remove_stored_card_Id_ajax');
+
+    function wp_2c2p_remove_stored_card_Id_ajax(){
+        $data = $_POST['data']; 
+
+        $wc_2c2p_stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
+
+        foreach ($wc_2c2p_stored_card as $key => $value) {
+            foreach ($value as $innerKey => $innerValue) {
+                if(strcasecmp(key($value), $data['token_id']) == 0){                    
+                    $stored_card_data = array($data['token_id'] => 
+                    array(key($innerValue)  => $innerValue[key($innerValue)]));
+                    break;
+                }
+            }
+        }
+
+        echo delete_user_meta(get_current_user_id(), 'wc_2c2p_stored_card',$stored_card_data); die;        
+    }
+
     //Add the Gateway to WooCommerce
     function woocommerce_add_gateway_2c2p_gateway($methods) {
         $methods[] = 'WC_Gateway_2c2p';
