@@ -70,7 +70,7 @@ function fun2c2p_init()
 
         } //END-__construct    
 
-        //Validating 123 payment expiry textbox
+        //Validating 123 payment expiry textbox    
         public function validate_wc_2c2p_123_payment_expiry_field( $key, $value ) {
             if (empty($value)) {
                 WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry like (8 - 720)', 'woo_2c2p'));
@@ -240,7 +240,7 @@ function fun2c2p_init()
                 'payment_description'   => $product_name,
                 'order_id'              => $order_id,
                 'invoice_no'            => $order_id,
-                'amount'                => $order->total,                
+                'amount'                => $order->order_total,
                 'customer_email'        => $cust_email,
                 'pay_category_id'       => "",
                 'promotion'             => "",
@@ -249,7 +249,7 @@ function fun2c2p_init()
                 'user_defined_3'        => "",
                 'user_defined_4'        => "",
                 'user_defined_5'        => "",
-                'stored_card_unique_id' => $wc_2c2p_stored_card_token_id != 0 ? $wc_2c2p_stored_card_token_id : "",                
+                'stored_card_unique_id' => $wc_2c2p_stored_card_token_id != 0 ? $wc_2c2p_stored_card_token_id : "",
                 );
             
             $objWC_2C2P_Validation_Helper = new WC_2C2P_Validation_Helper();

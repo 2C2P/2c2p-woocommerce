@@ -49,7 +49,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
                 
                 $this->wc_2c2p_form_fields["enable_store_card"] = $enable_store_card;
             }
-        }        
+        }
         
         $this->wc_2c2p_123_payment_expiry($paymentBody);
         $this->wc_2c2p_create_common_form_field($paymentBody);
@@ -86,7 +86,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $payment_description = $paymentBody['payment_description'];
         $order_id       = $paymentBody['order_id'];
         $invoice_no     = $paymentBody['invoice_no'];
-        $amount         = str_pad($paymentBody['amount'], 12, '0', STR_PAD_LEFT);
+        $amount         = str_pad($paymentBody['amount'], 12, '0', STR_PAD_LEFT);        
         $customer_email = $paymentBody['customer_email'];
         $result_url_1   = $redirect_url;
         $result_url_2   = $redirect_url;
@@ -131,8 +131,8 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $currenyCode = get_option('woocommerce_currency');
 
         foreach ($objWC_2c2p_currency->get_currency_code() as $key => $value) {
-            if($key === $currenyCode){                
-                return  $value['Num'];                
+            if($key === $currenyCode){
+                return  $value['Num'];
             }
         }
     }

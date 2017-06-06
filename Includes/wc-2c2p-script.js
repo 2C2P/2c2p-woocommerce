@@ -17,7 +17,7 @@ function doTokenRemove(){
                 cache: false,
                 success: function (data) { 
                 	if(data === "0"){
-                		alert("Error ! We cannot remove you stored card Id. Please try to referesh the page.");
+                		alert("Unable to remove your card. Please try again, and let us know if the problem persists.");
                 		return;
                 	}
 
@@ -27,10 +27,10 @@ function doTokenRemove(){
                 	}
 
                 	if(isdeleted.length === 0){
-                		alert("Error ! We cannot remove you stored card Id from UI (dropdown). Please try to referesh the page.")
+                		alert("Unable to remove your card. Please try again, and let us know if the problem persists.")
                 	}
                 	else{
-                		alert("successfully remove you stored card Id.");	
+                		alert("Your card has been removed successfully.");	
                 	}                	
                 },
                 error: function(data){                	
