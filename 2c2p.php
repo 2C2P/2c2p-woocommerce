@@ -1,12 +1,10 @@
 <?php
 /*
-Plugin Name: 2C2P Redirect Payment
-Plugin URI: http://www.2c2p.com/
-Description: Transforming millions of everyday payments with one time card facility
-Version: 7.0
+Plugin Name: 2C2P Redirect API for WooCommerce
+Description: Accept Payment (Credit/Debit Cards, Alipay, Alternative/Cash Payments) on your WooCommerce webstore.
+Version: 7.0.0
 Author: 2C2P 
 Author URI: http://www.2c2p.com/
-Contributors: 2C2P Payment Solution
 */
 
 add_action('plugins_loaded', 'fun2c2p_init', 0);
