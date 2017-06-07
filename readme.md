@@ -1,12 +1,11 @@
-=== 2C2P Redirect Payment Powered by 2C2P Payment Getaway ===
-Contributors: 2C2P Payment Solution
-Donate link: http://www.2c2p.com/ (Can you please provide the link. If we have any otherwise we can remove the line)
-Tags: ecommerce, e-commerce, commerce, woothemes, wordpress ecommerce (Not sure which one is added for our plugin)
+=== 2C2P Redirect API, Secure Payment by 2C2P  ===
+Contributors: 2C2P
+Tags: ecommerce, e-commerce, woocommerce, wordpress ecommerce, 2c2p, payment gateway, credit card
 Requires at least: 2.6.0  
-Tested up to: 7.0
-Stable tag: 7.0
-License: GPLv3  (Not sure which one is added for our plugin)
-License URI: http://www.2c2p.com/
+Tested up to: 7.0.0
+Stable tag: 7.0.0
+License: GPLv3
+License URI: https://www.2c2p.com/
 
 Accept Credit Cards and Debit Cards on your WooCommerce store.
 
@@ -29,7 +28,7 @@ Additional details on the payment process and configuration can be found in this
 	5. Enable/Diable -> Enable the stored card payment when you stick the checkbox.
 	6. 123 payment expiry -> Enter valid hours between (8-720).	
 
-== Getting sandbox credential == 
+== Getting sandbox account == 
 For testing, you may use the sandbox credentials provided at our developer portal @ https://developer.2c2p.com/docs/sandbox
 
 = Updating =
