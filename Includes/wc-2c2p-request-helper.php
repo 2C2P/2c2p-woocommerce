@@ -10,7 +10,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
     }
 
     private $wc_2c2p_form_fields = array(
-        "version" => "",
+        "version"     => "",
         "merchant_id" => "", 
         "payment_description" => "",
         "order_id" => "", 
@@ -63,7 +63,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $strHtml = "";
         foreach ($this->wc_2c2p_form_fields as $key => $value) {
             if (!empty($value)) {
-                $strHtml .= '<input type="hidden" name="' . htmlentities($key) . '" value="' . htmlentities($value) . '">';
+                $strHtml .= '<input type="hidden" name="' . esc_attr($key) . '" value="' . esc_attr($value) . '">';
             }        
         }
         
@@ -74,15 +74,16 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
     function wc_2c2p_create_common_form_field($paymentBody){
 
         $objWC_Gateway_2c2p = new WC_Gateway_2c2p();
-        $redirect_url   = $objWC_Gateway_2c2p->wc_2c2p_response_url($paymentBody['order_id']);
+        $redirect_url       = $objWC_Gateway_2c2p->wc_2c2p_response_url($paymentBody['order_id']);
         
-        $merchant_id    = esc_attr($this->pg_2c2p_setting_values['key_id']);
-        $secret_key     = esc_attr($this->pg_2c2p_setting_values['key_secret']);
+        $merchant_id    = isset($this->pg_2c2p_setting_values['key_id']) ? sanitize_text_field($this->pg_2c2p_setting_values['key_id']) : "";
+        $secret_key     = isset($this->pg_2c2p_setting_values['key_secret']) ? sanitize_text_field($this->pg_2c2p_setting_values['key_secret']) : "";
 
-        $currency       = $this->wc_2c2p_get_store_currency_code(); // Get is store currency code from woocommerece.
+        //Get is store currency code from woocommerece.
+        $currency       = sanitize_text_field($this->wc_2c2p_get_store_currency_code()); 
 
         $pay_category_id = "";
-        $promotion      = "";
+        $promotion       = "";
         $payment_description = $paymentBody['payment_description'];
         $order_id       = $paymentBody['order_id'];
         $invoice_no     = $paymentBody['invoice_no'];
@@ -110,8 +111,7 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $this->wc_2c2p_form_fields["request_3ds"]    = "";
         $this->wc_2c2p_form_fields["result_url_1"]   = $result_url_1; // Specify by plugin
         $this->wc_2c2p_form_fields["result_url_2"]   = $result_url_2; // Specify by plugin
-        $this->wc_2c2p_form_fields["payment_option"]   = "A"; // Pass by default Payment option as A
-        
+        $this->wc_2c2p_form_fields["payment_option"]   = "A"; // Pass by default Payment option as A        
     }
 
     function wc_2c2p_123_payment_expiry($paymentBody){
@@ -130,10 +130,14 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         $objWC_2c2p_currency = new WC_2c2p_currency();
         $currenyCode = get_option('woocommerce_currency');
 
+        if(!isset($currenyCode))
+            return "";
+
         foreach ($objWC_2c2p_currency->get_currency_code() as $key => $value) {
             if($key === $currenyCode){
                 return  $value['Num'];
             }
+            return "";
         }
     }
 }

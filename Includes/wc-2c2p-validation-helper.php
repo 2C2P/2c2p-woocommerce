@@ -6,7 +6,7 @@ class WC_2C2P_Validation_Helper{
 		"payment_description" 	=> "",
 		"order_id" 				=> "",			
 		"amount" 				=> "",
-		//"currency"				=> "",
+		"customer_email"		=> "",
 		);
 
 	function __construct() { }
@@ -42,6 +42,10 @@ class WC_2C2P_Validation_Helper{
 					$this->wc_2c2p_error['amount'] = "Please enter amount is digit's.";
 				}				
 			}
+		}
+
+		if(!is_email($parameter['customer_email'])){
+			$this->wc_2c2p_error['amount'] = "Please enter valid email address.";
 		}
 
 		foreach ($this->wc_2c2p_error as $key => $value) {
