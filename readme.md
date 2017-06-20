@@ -30,8 +30,8 @@ Accept Payment (Credit/Debit Cards, Alipay, Alternative/Cash Payments) on your W
 	* Description   -> Display the description when you select payment type as 2C2P.
 	* Merchant ID   -> Merchant ID provided by 2C2P, available in my2C2P Portal
 	* Secrect Key   -> Secret Key for authentication, available in my2C2P Portal
-	* Mode			-> Select mode - Test: Sandbox, Live: Production
-	* Enable/Diable -> Enable the stored card payment when you stick the checkbox.
+	* Mode		-> Select mode - Test: Sandbox, Live: Production
+	* Store Card Payment -> Enable the stored card payment when you stick the checkbox.
 	* 123 payment expiry -> Payment validity duration for 1-2-3(APM) Payment slip, in hours between (8-720).	
 
 = Updating =
@@ -49,6 +49,9 @@ Please contact our sales team at support@2c2p.com
 
 == Screenshots ==
 1. Open the plugin's setting page and enter configuration setting field for 2c2p payment.
+2. During checkout, customer can select 2C2P Payment and also select previously stored cards (if enabled stored card payment)
+3. Customer shall be redirected to 2C2P's payment page, where they will be able to save their card (if enabled stored card payment) 
+4. Customer can see the payment result page.
 
 == Changelog ==
 = 7.0.0 =

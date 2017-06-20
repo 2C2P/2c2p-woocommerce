@@ -60,11 +60,14 @@ return array(
     'wc_2c2p_stored_card_payment' => array(
         'title' => __('Enable/Disable', 'woo_2c2p'),
         'type' => 'checkbox',
-        'label' => __('Stored Card Payment', 'woo_2c2p'),            
+        'label' => __('Stored Card Payment', 'woo_2c2p'),  
+		'description' => __('Allow customers to save their card details for future payments.'),
+        'desc_tip' => true
     ),   
     'wc_2c2p_123_payment_expiry' => array(
         'title' => __('123 Payment Expiry (hours)', 'woo_2c2p'),
         'type' => 'text',
+		'default' => '72',
         'description' => __('123 Payment Expiry in hours, valid between (8-720)', 'woo_2c2p'),
         'desc_tip' => true,        
     ),

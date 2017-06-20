@@ -72,15 +72,15 @@ function fun2c2p_init()
         /* Validating 123 payment expiry textbox */
         public function validate_wc_2c2p_123_payment_expiry_field( $key, $value ) {
             if (empty($value)) {
-                WC_Admin_Settings::add_error(esc_html__('Please enter 123 payment expiry like (8 - 720)','woo_2c2p'));
+                WC_Admin_Settings::add_error(esc_html__('Please enter 123 payment expiry in hours between (8 - 720)','woo_2c2p'));
                 return $value = 0;
             }
             else if(!is_numeric($value)){
-                WC_Admin_Settings::add_error(esc_html__('Please enter 123 payment expiry in numeric like (8 - 720)','woo_2c2p'));
+                WC_Admin_Settings::add_error(esc_html__('Invalid 123 payment expiry, key in numbers only','woo_2c2p'));
                 return $value = 0;
             }
             else if(!($value >= 8 && $value <= 720)){
-                WC_Admin_Settings::add_error(esc_html__('Please enter 123 payment expiry in between 8 - 720 hours only','woo_2c2p'));
+                WC_Admin_Settings::add_error(esc_html__('Invalid 123 payment expiry, key in numbers between 8 - 720 only','woo_2c2p'));
                 return $value = 0;
             }
 
