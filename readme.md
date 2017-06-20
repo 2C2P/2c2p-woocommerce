@@ -1,7 +1,7 @@
 === 2C2P Redirect API for WooCommerce ===
-Author: 2C2P
-Author URI: https://www.2C2P.com
-Tags: ecommerce, e-commerce, woocommerce, wordpress ecommerce, 2c2p, payment gateway, credit card
+Contributors: 2C2P
+Author URI: https://www.2c2p.com
+Tags: 2c2p, payment gateway, credit card payment, alternative payment, woocommerce, ecommerce, e-commerce 
 Requires at least: 2.6.0
 Tested up to: 4.7.5
 Stable tag: 7.0.0
@@ -25,23 +25,31 @@ Accept Payment (Credit/Debit Cards, Alipay, Alternative/Cash Payments) on your W
 1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the \'Plugins\' screen in WordPress
 3. Use the Settings->Plugin Name screen to configure the plugin enter the below data for setting page.
-	1. Enable/Status -> Enable/Disable the plugin. If disabled , it will not show 2C2P on the checkout page
-	2. Title      	 -> Display title for 2c2p payment getaway.
-	3. Description   -> Display the description when you select payment type as 2c2p.
-	2. Merchant ID   -> MID as shown in the 2C2P merchant interface
-	3. Secrect Key   -> Secret key from the 2C2P merchant interface
-	4. Mode			 -> Select model for payment like Test,Live
-	5. Enable/Diable -> Enable the stored card payment when you stick the checkbox.
-	6. 123 payment expiry -> Enter valid hours between (8-720).	
+	* Enable/Status -> Enable/Disable the plugin. If disabled, it will not show 2C2P on the checkout page
+	* Title      	-> Display title for 2C2P payment getaway.
+	* Description   -> Display the description when you select payment type as 2C2P.
+	* Merchant ID   -> Merchant ID provided by 2C2P, available in my2C2P Portal
+	* Secrect Key   -> Secret Key for authentication, available in my2C2P Portal
+	* Mode			-> Select mode - Test: Sandbox, Live: Production
+	* Enable/Diable -> Enable the stored card payment when you stick the checkbox.
+	* 123 payment expiry -> Payment validity duration for 1-2-3(APM) Payment slip, in hours between (8-720).	
 
 = Updating =
 Automatic updates should work like a charm; as always though, ensure you backup your site just in case.
 
 == Frequently Asked Questions ==
-1. How to get test / sandbox account?
+= How to get test / sandbox account? = 
 For testing, you may use the sandbox credentials provided at our developer portal @ https://developer.2c2p.com/docs/sandbox
 
+= Where can I find the documentation about the integration manual / plugin? = 
+Visit our 2C2P's developer portal for more information about the integration https://developer.2c2p.com
+
+= How can I go live with 2C2P? = 
+Please contact our sales team at support@2c2p.com
 
 == Screenshots ==
-1. Click the setting button once plugin is activated.
-2. Opened the setting page and enter configuration setting field for 2c2p payment.
+1. Open the plugin's setting page and enter configuration setting field for 2c2p payment.
+
+== Changelog ==
+= 7.0.0 =
+Initial release for redirect payment api, payment version 7.0

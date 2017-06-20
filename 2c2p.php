@@ -145,8 +145,7 @@ function fun2c2p_init()
         /* Admin Panel Options.Show info on Admin Backend */
         public function admin_options() {            
             echo '<h3>' . esc_html__('2C2P','woo_2c2p') . '</h3>';
-            echo '<p>'  . esc_html__('2C2P provides a wide range of payment. you just save your account detail in it and enjoy shopping just in one click on 2C2P','woo_2c2p') . '</p>';
-            echo '<p><small><strong>' . esc_html__('Confirm your Mode: Is it LIVE or TEST.','woo_2c2p') . '</strong></small></p>';
+            echo '<p>'  . esc_html__('2C2P provides a wide range of payment. You just save your account detail and start accepting payments via 2C2P','woo_2c2p') . '</p>';
             echo '<table class="form-table">';
             // Generate the HTML For the settings form.
             $this->generate_settings_html();
