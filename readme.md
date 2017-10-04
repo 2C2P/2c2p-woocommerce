@@ -3,7 +3,7 @@ Contributors: 2C2P
 Author URI: https://www.2C2P.com
 Tags: ecommerce, e-commerce, woocommerce, wordpress ecommerce, 2c2p, payment gateway, credit card
 Requires at least: 2.6.0
-Tested up to: 4.7.5
+Tested up to: 4.8
 Stable tag: 7.0.1
 License: MIT
 
