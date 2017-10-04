@@ -2,6 +2,7 @@
 
 class WC_2C2P_Constant{
     const WC_2C2P_VERSION = '7.0'; //Current version used for 2c2p integration.
+    const WC_2C2P_DEFAULT_LANG = 'en_GB'; //Payment getaway default langauge supported.    
 }
 
 class WC_2c2p_currency{

@@ -89,113 +89,113 @@ class wc_2c2p_hash_helper{
     function wc_2c2p_create_hashvalue($parameter){
 
     	if(array_key_exists('version',$parameter)){
-    		if(!empty($parameter['version'])) $hashValue .= $parameter['version'];
+    		if(!empty($parameter['version'])) $this->hashValue .= $parameter['version'];
     	}
     	if(array_key_exists('merchant_id',$parameter)){
-    		if(!empty($parameter['merchant_id'])) $hashValue .= $parameter['merchant_id'];
+    		if(!empty($parameter['merchant_id'])) $this->hashValue .= $parameter['merchant_id'];
     	}
     	if(array_key_exists('payment_description',$parameter)){
-    		if(!empty($parameter['payment_description'])) $hashValue .= $parameter['payment_description'];
+    		if(!empty($parameter['payment_description'])) $this->hashValue .= $parameter['payment_description'];
     	}
     	if(array_key_exists('order_id',$parameter)){
-    		if(!empty($parameter['order_id'])) $hashValue .= $parameter['order_id'];
+    		if(!empty($parameter['order_id'])) $this->hashValue .= $parameter['order_id'];
     	}
     	if(array_key_exists('invoice_no',$parameter)){
-    		if(!empty($parameter['invoice_no'])) $hashValue .= $parameter['invoice_no'];
+    		if(!empty($parameter['invoice_no'])) $this->hashValue .= $parameter['invoice_no'];
     	}
     	if(array_key_exists('currency',$parameter)){
-    		if(!empty($parameter['currency'])) $hashValue .= $parameter['currency'];
+    		if(!empty($parameter['currency'])) $this->hashValue .= $parameter['currency'];
     	}
     	if(array_key_exists('amount',$parameter)){
-    		if(!empty($parameter['amount'])) $hashValue .= $parameter['amount'];
+    		if(!empty($parameter['amount'])) $this->hashValue .= $parameter['amount'];
     	}
     	if(array_key_exists('customer_email',$parameter)){
-    		if(!empty($parameter['customer_email'])) $hashValue .= $parameter['customer_email'];
+    		if(!empty($parameter['customer_email'])) $this->hashValue .= $parameter['customer_email'];
     	}
     	if(array_key_exists('pay_category_id',$parameter)){
-    		if(!empty($parameter['pay_category_id'])) $hashValue .= $parameter['pay_category_id'];
+    		if(!empty($parameter['pay_category_id'])) $this->hashValue .= $parameter['pay_category_id'];
     	}
     	if(array_key_exists('promotion',$parameter)){
-    		if(!empty($parameter['promotion'])) $hashValue .= $parameter['promotion'];
+    		if(!empty($parameter['promotion'])) $this->hashValue .= $parameter['promotion'];
     	}
     	if(array_key_exists('user_defined_1',$parameter)){
-    		if(!empty($parameter['user_defined_1'])) $hashValue .= $parameter['user_defined_1'];
+    		if(!empty($parameter['user_defined_1'])) $this->hashValue .= $parameter['user_defined_1'];
     	}
     	if(array_key_exists('user_defined_2',$parameter)){
-    		if(!empty($parameter['user_defined_2'])) $hashValue .= $parameter['user_defined_2'];
+    		if(!empty($parameter['user_defined_2'])) $this->hashValue .= $parameter['user_defined_2'];
     	}
     	if(array_key_exists('user_defined_3',$parameter)){
-    		if(!empty($parameter['user_defined_3'])) $hashValue .= $parameter['user_defined_3'];
+    		if(!empty($parameter['user_defined_3'])) $this->hashValue .= $parameter['user_defined_3'];
     	}
     	if(array_key_exists('user_defined_4',$parameter)){
-    		if(!empty($parameter['user_defined_4'])) $hashValue .= $parameter['user_defined_4'];
+    		if(!empty($parameter['user_defined_4'])) $this->hashValue .= $parameter['user_defined_4'];
     	}
     	if(array_key_exists('user_defined_5',$parameter)){
-    		if(!empty($parameter['user_defined_5'])) $hashValue .= $parameter['user_defined_5'];
+    		if(!empty($parameter['user_defined_5'])) $this->hashValue .= $parameter['user_defined_5'];
     	}
     	if(array_key_exists('result_url_1',$parameter)){
-    		if(!empty($parameter['result_url_1'])) $hashValue .= $parameter['result_url_1'];
+    		if(!empty($parameter['result_url_1'])) $this->hashValue .= $parameter['result_url_1'];
     	}
     	if(array_key_exists('result_url_2',$parameter)){
-    		if(!empty($parameter['result_url_2'])) $hashValue .= $parameter['result_url_2'];
+    		if(!empty($parameter['result_url_2'])) $this->hashValue .= $parameter['result_url_2'];
     	}
     	if(array_key_exists('enable_store_card',$parameter)){
-    		if(!empty($parameter['enable_store_card'])) $hashValue .= $parameter['enable_store_card'];
+    		if(!empty($parameter['enable_store_card'])) $this->hashValue .= $parameter['enable_store_card'];
     	}
     	if(array_key_exists('stored_card_unique_id',$parameter)){
-    		if(!empty($parameter['stored_card_unique_id'])) $hashValue .= $parameter['stored_card_unique_id'];
+    		if(!empty($parameter['stored_card_unique_id'])) $this->hashValue .= $parameter['stored_card_unique_id'];
     	}
     	if(array_key_exists('request_3ds',$parameter)){
     		//if(!empty($parameter['request_3ds'])) $hashValue .= $parameter['request_3ds'];
-            $hashValue .= $parameter['request_3ds'];
+            $this->hashValue .= $parameter['request_3ds'];
     	}
     	if(array_key_exists('recurring',$parameter)){
-    		if(!empty($parameter['recurring'])) $hashValue .= $parameter['recurring'];
+    		if(!empty($parameter['recurring'])) $this->hashValue .= $parameter['recurring'];
     	}
     	if(array_key_exists('order_prefix',$parameter)){
-    		if(!empty($parameter['order_prefix'])) $hashValue .= $parameter['order_prefix'];
+    		if(!empty($parameter['order_prefix'])) $this->hashValue .= $parameter['order_prefix'];
     	}
     	if(array_key_exists('recurring_amount',$parameter)){
-    		if(!empty($parameter['recurring_amount'])) $hashValue .= $parameter['recurring_amount'];
+    		if(!empty($parameter['recurring_amount'])) $this->hashValue .= $parameter['recurring_amount'];
     	}
     	if(array_key_exists('allow_accumulate',$parameter)){
-    		if(!empty($parameter['allow_accumulate'])) $hashValue .= $parameter['allow_accumulate'];
+    		if(!empty($parameter['allow_accumulate'])) $this->hashValue .= $parameter['allow_accumulate'];
     	}
     	if(array_key_exists('max_accumulate_amount',$parameter)){
-    		if(!empty($parameter['max_accumulate_amount'])) $hashValue .= $parameter['max_accumulate_amount'];
+    		if(!empty($parameter['max_accumulate_amount'])) $this->hashValue .= $parameter['max_accumulate_amount'];
     	}
     	if(array_key_exists('recurring_interval',$parameter)){
-    		if(!empty($parameter['recurring_interval'])) $hashValue .= $parameter['recurring_interval'];
+    		if(!empty($parameter['recurring_interval'])) $this->hashValue .= $parameter['recurring_interval'];
     	}
     	if(array_key_exists('recurring_count',$parameter)){
-    		if(!empty($parameter['recurring_count'])) $hashValue .= $parameter['recurring_count'];
+    		if(!empty($parameter['recurring_count'])) $this->hashValue .= $parameter['recurring_count'];
     	}
     	if(array_key_exists('charge_next_date',$parameter)){
-    		if(!empty($parameter['charge_next_date'])) $hashValue .= $parameter['charge_next_date'];
+    		if(!empty($parameter['charge_next_date'])) $this->hashValue .= $parameter['charge_next_date'];
     	}
     	if(array_key_exists('charge_on_date',$parameter)){
-    		if(!empty($parameter['charge_on_date'])) $hashValue .= $parameter['charge_on_date'];
+    		if(!empty($parameter['charge_on_date'])) $this->hashValue .= $parameter['charge_on_date'];
     	}
     	if(array_key_exists('payment_option',$parameter)){
-    		if(!empty($parameter['payment_option'])) $hashValue .= $parameter['payment_option'];
+    		if(!empty($parameter['payment_option'])) $this->hashValue .= $parameter['payment_option'];
     	}
     	if(array_key_exists('ipp_interest_type',$parameter)){
-    		if(!empty($parameter['ipp_interest_type'])) $hashValue .= $parameter['ipp_interest_type'];
+    		if(!empty($parameter['ipp_interest_type'])) $this->hashValue .= $parameter['ipp_interest_type'];
     	}
     	if(array_key_exists('payment_expiry',$parameter)){
-    		if(!empty($parameter['payment_expiry'])) $hashValue .= $parameter['payment_expiry'];
+    		if(!empty($parameter['payment_expiry'])) $this->hashValue .= $parameter['payment_expiry'];
     	}
     	if(array_key_exists('default_lang',$parameter)){
-    		if(!empty($parameter['default_lang'])) $hashValue .= $parameter['default_lang'];
+    		if(!empty($parameter['default_lang'])) $this->hashValue .= $parameter['default_lang'];
     	}
     	if(array_key_exists('statement_descriptor',$parameter)){
-    		if(!empty($parameter['statement_descriptor'])) $hashValue .= $parameter['statement_descriptor'];
+    		if(!empty($parameter['statement_descriptor'])) $this->hashValue .= $parameter['statement_descriptor'];
     	}
 
     	$SECRETKEY  = esc_attr($this->pg_2c2p_setting_values['key_secret']);   
 
         // Generate the hash value.
-    	return hash_hmac('sha1', $hashValue, $SECRETKEY, false);
+    	return hash_hmac('sha1', $this->hashValue, $SECRETKEY, false);
     }
 }
 

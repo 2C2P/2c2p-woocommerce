@@ -5,8 +5,8 @@ return array(
         'title' => __('Enable/Disable', 'woo_2c2p'),
         'type' => 'checkbox',
         'label' => __('Enable 2c2p', 'woo_2c2p'),
-        'default' => 'yes',
-        'description' => 'If checked, 2C2P will be available as payment option at checkout page'
+        'default' => 'no',
+        'description' => 'If ticked, It will show in the Payment List as a payment option'
     ),    
     'title' => array(
         'title' => __('Title', 'woo_2c2p'),
@@ -30,21 +30,21 @@ return array(
     'key_id' => array(
         'title' => __('Merchant ID', 'woo_2c2p'),
         'type' => 'text',
-        'description' => __('Provided by 2C2P'),
+        'description' => __('Provided to Merchant by 2C2P team'),
         'desc_tip' => true
     ),    
     'key_secret' => array(
         'title' => __('Secret Key', 'woo_2c2p'),
         'type' => 'text',
-        'description' => __('Provided by 2C2P, available in my2C2P Portal'),
+        'description' => __('Provided to Merchant by 2C2P team'),
         'desc_tip' => true
     ),    
     'test_mode' => array(
         'title' => __('Mode', 'woo_2c2p'),
         'type' => 'select',
-        'label' => __('Tranasction Mode.', 'woo_2c2p'),    
-        'default' => 'demo2',
-        'description' => __('Tranasction Mode'),
+        'label' => __('2c2p Tranasction Mode.', 'woo_2c2p'),    
+        'default' => 'test',
+        'description' => __('Mode of 2c2p activities'),
         'desc_tip' => true,
         'class'        => 'wc-enhanced-select',
         'options' => array(
@@ -60,16 +60,30 @@ return array(
     'wc_2c2p_stored_card_payment' => array(
         'title' => __('Enable/Disable', 'woo_2c2p'),
         'type' => 'checkbox',
-        'label' => __('Stored Card Payment', 'woo_2c2p'),  
-		'description' => __('Allow customers to save their card details for future payments.'),
-        'desc_tip' => true
+        'label' => __('Stored Card Payment', 'woo_2c2p'),            
     ),   
     'wc_2c2p_123_payment_expiry' => array(
         'title' => __('123 Payment Expiry (hours)', 'woo_2c2p'),
         'type' => 'text',
-		'default' => '72',
-        'description' => __('123 Payment Expiry in hours, valid between (8-720)', 'woo_2c2p'),
+        'description' => __('123 Payment Expiry in hours like (8-720)', 'woo_2c2p'),
         'desc_tip' => true,        
     ),
+    'wc_2c2p_default_lang' => array(
+        'title' => __('Select Language', 'woo_2c2p'),
+        'type' => 'select',
+        'label' => __('Select Language.', 'woo_2c2p'),    
+        'default' => 'test',
+        'description' => __('2C2P currently supports 6 languages'),
+        'desc_tip' => true,
+        'class'        => 'wc-enhanced-select',
+        'options' => array(
+            'en' => 'English',
+            'ja' => 'Japanese',
+            'th' => 'Thailand',
+            'id' => 'Bahasa Indonesia',
+            'my' => 'Burmese',
+            'zh' => 'Simplified Chinese',
+        ),
+    ),    
 );
 ?> 

@@ -2,12 +2,135 @@
 /*
 Plugin Name: 2C2P Redirect API for WooCommerce
 Description: Accept Payment (Credit/Debit Cards, Alipay, Alternative/Cash Payments) on your WooCommerce webstore.
-Version: 7.0.0
+Version: 7.0.1
 Author: 2C2P 
 Author URI: http://www.2c2p.com/
 */
 
 add_action('plugins_loaded', 'fun2c2p_init', 0);
+add_action('admin_head', 'fun2c2p_backorder_font_icon');
+add_action( 'init', 'fun2c2p_register_awaiting_payment_order_status' );
+add_filter('wc_order_statuses', 'fun2c2p_add_awaiting_payment_to_order_statuses');
+
+register_activation_hook(__FILE__, 'fun2c2p_register_activation_hook');
+register_deactivation_hook( __FILE__, 'fun2c2p_register_deactivation_hook' );
+
+function fun2c2p_register_activation_hook() {
+
+    global $woocommerce;
+    
+    $args = array(
+        'post_type' => 'shop_order',
+        'post_status' => 'wc-pending',
+        'posts_per_page' => -1,
+        'meta_query'    => array(
+            array(
+                'key'       => '_payment_method',
+                'value'     => '2c2p',
+                'compare'   => 'LIKE',
+                )
+            )
+        );
+
+    $loop = new WP_Query($args);
+    
+    try {            
+        while ( $loop->have_posts() ) : $loop->the_post();
+        $order = new WC_Order($loop->post->ID);
+        $order->update_status('awaiting-payment');
+        endwhile;
+    } catch (Exception $e) {
+
+    }
+}
+
+function fun2c2p_register_deactivation_hook() {
+
+    global $woocommerce;
+
+    $args = array(
+        'post_type' => 'shop_order',
+        'post_status' => 'wc-awaiting-payment',
+        'posts_per_page' => -1,
+        'meta_query'    => array(
+            array(
+                'key'       => '_payment_method',
+                'value'     => '2c2p',
+                'compare'   => 'LIKE',
+                )
+            )
+        );
+
+    $loop = new WP_Query($args);
+    
+    try {            
+        while ( $loop->have_posts() ) : $loop->the_post();
+        $order = new WC_Order($loop->post->ID);
+        $order->update_status('pending');
+        endwhile;
+    } catch (Exception $e) {
+
+    }
+}
+
+
+/* This function is set the 2c2p icon in admin panel */
+function fun2c2p_backorder_font_icon() {
+  echo '<style>
+            .widefat .column-order_status mark.awaiting-payment:after{
+                font-family:WooCommerce;
+                speak:none;
+                font-weight:400;
+                font-variant:normal;
+                text-transform:none;
+                line-height:1;
+                -webkit-font-smoothing:antialiased;
+                margin:0;
+                text-indent:0;
+                position:absolute;
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                text-align:center;
+            }
+            .widefat .column-order_status mark.awaiting-payment:after{
+                content:"\e012";
+                color:#0496c9;
+            }
+  </style>';
+}
+
+/* This function is used to add custom order status into post */
+function fun2c2p_register_awaiting_payment_order_status() {
+
+    register_post_status('wc-awaiting-payment', array(
+        'label'                     => 'Awaiting Payment',
+        'public'                    => true,
+        'exclude_from_search'       => false,
+        'show_in_admin_all_list'    => true,
+        'show_in_admin_status_list' => true,
+        'label_count'               => _n_noop('Awaiting Payment <span class="count">(%s)</span>', 'Awaiting Payment <span class="count">(%s)</span>' )
+    ));
+}
+
+// Add to list of WC Order statuses
+function fun2c2p_add_awaiting_payment_to_order_statuses( $order_statuses ) {
+
+    $new_order_statuses = array();
+  
+    // add new order status after processing
+    foreach ( $order_statuses as $key => $status ) {
+  
+        $new_order_statuses[ $key ] = $status;
+        if ( 'wc-processing' === $key ) {            
+            $new_order_statuses['wc-awaiting-payment'] = 'Awaiting Payment';            
+        }
+    }
+        
+    return $new_order_statuses;
+}
+
 
 function fun2c2p_init()
 {
@@ -48,7 +171,7 @@ function fun2c2p_init()
             $this->title            = $this->settings['title'] . $test_title; // Title as displayed on Frontend
             $this->description      = $this->settings['description'] . $test_description; // Description as displayed on Frontend
             $this->liveurl          = 'https://' . $this->settings['test_mode'] . '.2c2p.com/' . $demo . 'RedirectV3/payment';
-            $this->service_provider = $this->settings['service_provider'];
+            $this->service_provider = array_key_exists('service_provider', $this->settings) ? $this->settings['service_provider'] : "";
             $this->msg['message']   = '';
             $this->msg['class']     = '';
             
@@ -72,15 +195,15 @@ function fun2c2p_init()
         /* Validating 123 payment expiry textbox */
         public function validate_wc_2c2p_123_payment_expiry_field( $key, $value ) {
             if (empty($value)) {
-                WC_Admin_Settings::add_error(esc_html__('Please enter 123 payment expiry in hours between (8 - 720)','woo_2c2p'));
+                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry like (8 - 720)', 'woo_2c2p'));
                 return $value = 0;
             }
             else if(!is_numeric($value)){
-                WC_Admin_Settings::add_error(esc_html__('Invalid 123 payment expiry, key in numbers only','woo_2c2p'));
+                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in numeric like (8 - 720)', 'woo_2c2p'));
                 return $value = 0;
             }
             else if(!($value >= 8 && $value <= 720)){
-                WC_Admin_Settings::add_error(esc_html__('Invalid 123 payment expiry, key in numbers between 8 - 720 only','woo_2c2p'));
+                WC_Admin_Settings::add_error( esc_html__( 'Please enter 123 payment expiry in between 8 - 720 hours only', 'woo_2c2p'));
                 return $value = 0;
             }
 
@@ -89,7 +212,7 @@ function fun2c2p_init()
 
         public function validate_key_id_field( $key, $value ) {
             if (empty($value)) {
-                WC_Admin_Settings::add_error(esc_html__('Please Enter Merchant Id','woo_2c2p'));
+                WC_Admin_Settings::add_error( esc_html__( 'Please Enter Merchant Id', 'woo_2c2p'));
                 return $value;
             }
             return $value;
@@ -97,7 +220,7 @@ function fun2c2p_init()
 
          public function validate_key_secret_field( $key, $value ) {
             if (empty($value)) {
-                WC_Admin_Settings::add_error(esc_html__('Please Enter Secret Key','woo_2c2p'));
+                WC_Admin_Settings::add_error( esc_html__( 'Please Enter Secret Key', 'woo_2c2p'));
                 return $value;
             }
             return $value;
@@ -133,7 +256,7 @@ function fun2c2p_init()
             if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
                 $redirect_url = add_query_arg('wc-api', get_class($this), $redirect_url);
             }
-
+            
             return $redirect_url;
         }
         
@@ -145,7 +268,8 @@ function fun2c2p_init()
         /* Admin Panel Options.Show info on Admin Backend */
         public function admin_options() {            
             echo '<h3>' . esc_html__('2C2P','woo_2c2p') . '</h3>';
-            echo '<p>'  . esc_html__('2C2P provides a wide range of payment. You just save your account detail and start accepting payments via 2C2P','woo_2c2p') . '</p>';
+            echo '<p>'  . esc_html__('2C2P provides a wide range of payment. you just save your account detail in it and enjoy shopping just in one click on 2C2P','woo_2c2p') . '</p>';
+            echo '<p><small><strong>' . esc_html__('Confirm your Mode: Is it LIVE or TEST.','woo_2c2p') . '</strong></small></p>';
             echo '<table class="form-table">';
             // Generate the HTML For the settings form.
             $this->generate_settings_html();
@@ -154,13 +278,13 @@ function fun2c2p_init()
         
         /* There are no payment fields, but we want to show the description if set. */
         function payment_fields(){
-            if (!empty($this->description)) {                
+            if (!empty($this->description)) {
                 echo wpautop(wptexturize($this->description));
 
                 if(is_user_logged_in()){
                     if(strcasecmp($this->settings['wc_2c2p_stored_card_payment'], "yes") == 0){
                         $strHtml = "";
-                        $wc_2c2p_stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");
+                        $wc_2c2p_stored_card = get_user_meta(get_current_user_id(),"wc_2c2p_stored_card");                        
 
                         foreach ($wc_2c2p_stored_card as $key => $value) {                            
                             foreach ($value as $innerKey => $innerValue) {
@@ -169,17 +293,17 @@ function fun2c2p_init()
                         }
 
                         if(!empty($strHtml)){
-                            echo  "<table id='tblToken'>";
-                            echo  "<tr>";
-                            echo  "<th style='width:140px;'>Select my card</th>";
-                            echo  "<td> <select id='wc_2c2p_stored_card' name='wc_2c2p_stored_card' >";
-                            echo  "<option value='0'>I'll use a new card</option>";
-                            echo  $strHtml;
-                            echo  "</select></td>";
-                            echo  "<td><input type='button' id='btn_2c2p_remove' name='btn_2c2p_remove' value='Remove Card' ></td>";
-                            echo  "</tr>";
-                            echo  "</table>";
-                        }                        
+                            echo "<table id='tblToken'>";
+                            echo "<tr>";
+                            echo "<th style='width:140px;'>Select my card</th>";
+                            echo "<td> <select id='wc_2c2p_stored_card' name='wc_2c2p_stored_card' >";                            
+                            echo "<option value='0'>I'll use a new card</option>";
+                            echo $strHtml;
+                            echo "</select></td>";
+                            echo  "<td><input type='button' id='btn_2c2p_remove' name='btn_2c2p_remove' value='Remove Card' style='display:none;' ></td>";
+                            echo "</tr>";                            
+                            echo "</table>";                            
+                        }  
                         echo "<input type='hidden' value='". esc_url(admin_url('admin-ajax.php')) ."' id='ajax_url' />";
                     }
                 }
@@ -228,33 +352,23 @@ function fun2c2p_init()
             else{
                 $cust_email = $order->data['billing']['email']; //Gust customer.
             }
-            
-            $item_count = count($order->get_items());
-            $current_count = 0;
+                        
             foreach($order->get_items() as $item){                
-                $product_name .= $item['name'];
-                $current_count++;
-
-                if($item_count !== $current_count)
-                    $product_name .= ',';                
+                $product_name .= $item['name'] . ', ';                
             }
 
+            $product_name = (strlen($product_name) > 0) ? substr($product_name, 0, strlen($product_name) - 2) : "";
             $product_name .= '.';
+            $product_name = filter_var($product_name, FILTER_SANITIZE_STRING);
 
             $fun2c2p_args = array(
                 'payment_description'   => $product_name,
                 'order_id'              => $order_id,
                 'invoice_no'            => $order_id,
                 'amount'                => $order->order_total,
-                'customer_email'        => sanitize_email($cust_email),
-                'pay_category_id'       => "",
-                'promotion'             => "",
-                'user_defined_1'        => "",
-                'user_defined_2'        => "",
-                'user_defined_3'        => "",
-                'user_defined_4'        => "",
-                'user_defined_5'        => "",
+                'customer_email'        => sanitize_email($cust_email),                
                 'stored_card_unique_id' => $wc_2c2p_stored_card_token_id != 0 ? $wc_2c2p_stored_card_token_id : "",
+                'default_lang'          => $default_lang
                 );
             
             $objWC_2C2P_Validation_Helper = new WC_2C2P_Validation_Helper();
@@ -279,6 +393,7 @@ function fun2c2p_init()
             $objwc_2c2p_construct_request = new wc_2c2p_construct_request_helper();            
             $wc_2c2p_form_field = $objwc_2c2p_construct_request->wc_2c2p_construct_request(is_user_logged_in(),$fun2c2p_args);
             
+            $strHtml = '';
             $strHtml .= '<form action="' . esc_url($this->liveurl) . '" method="post" id="2c2p_payment_form">';
             $strHtml .= $wc_2c2p_form_field;
             $strHtml .= '<input type="submit" class="button-alt" id="submit_2c2p_payment_form" value="' . esc_html__('Pay via 2C2P','woo_2c2p') . '" />';
@@ -306,8 +421,8 @@ function fun2c2p_init()
         /* handle the PG response */
         function check_2c2p_response() {
 
-            global $woocommerce;                    
-
+            global $woocommerce;
+                            
             if (isset($_REQUEST['order_id']) && isset($_REQUEST['merchant_id'])) {
 
                 $order_id = sanitize_text_field($_REQUEST['order_id']);
@@ -315,7 +430,7 @@ function fun2c2p_init()
                 if (!empty($order_id)) {
                     try {
                         $order = new WC_Order($order_id);
-
+                
                         /*Sanitize fields*/
                         $hash  = sanitize_text_field($_REQUEST['hash_value']);                        
                         $transaction_ref = isset($_REQUEST['transaction_ref']) ? sanitize_text_field($_REQUEST['transaction_ref']) : "";
@@ -326,7 +441,7 @@ function fun2c2p_init()
                         $approval_code =  isset($_REQUEST['approval_code']) ? sanitize_text_field($_REQUEST['approval_code']) : "" ;
                         $masked_pan = isset($_REQUEST['masked_pan']) ? sanitize_text_field($_REQUEST['masked_pan']) : "" ;
                         $stored_card_unique_id = isset($_REQUEST['stored_card_unique_id']) ? sanitize_text_field($_REQUEST['stored_card_unique_id']) : "" ;
-
+                        
                         $objwc_2c2p_is_valid_hash = new wc_2c2p_hash_helper();
                         $isValidHash = $objwc_2c2p_is_valid_hash->wc_2c2p_is_valid_hash($_REQUEST);
                         
@@ -368,21 +483,21 @@ function fun2c2p_init()
                                             if(!$isFounded) {
                                                 if(!empty($_REQUEST['masked_pan']) && !empty($_REQUEST['stored_card_unique_id'])){                                                    
                                                     add_user_meta($order->user_id, "wc_2c2p_stored_card", $stored_card_data);
-                                                }
                                             }
                                         }
                                     } 
-                                                                    
+                                    } 
+
                                     $trans_authorised     = true;
                                     $this->msg['message'] = "Thank you for shopping with us. Your account has been charged and your transaction is successful.";
                                     $this->msg['class']   = 'woocommerce-message';
-
+                                    
                                     if (strcasecmp($order->status, 'processing') == 0) {
                                         $order->add_order_note('order_id: ' . $order_id . '<br/>transaction_ref: ' . $transaction_ref . '<br/>payment status: ' . $payment_status . '<br/>amount: ' . $payment_amount . '<br/>eci: ' . $eic . '<br/>transaction_datetime: ' . $transaction_datetime . '<br/>approval_code: ' . $approval_code);
-                                        $order->update_status('completed');
+                                        $order->update_status('processing');
                                     } 
                                     else {
-                                        $order->update_status('completed');                                        
+                                        $order->update_status('processing');                                        
                                         $order->payment_complete();
 
                                         $order->add_order_note('2C2P payment transaction successful.<br/>order_id: ' . $order_id . '<br/>transaction_ref: ' . $transaction_ref . '<br/>eci: ' . $eic . '<br/>transaction_datetime: ' . $transaction_datetime . '<br/>approval_code: ' . $approval_code);
@@ -397,7 +512,7 @@ function fun2c2p_init()
 
                                     $order->add_order_note('2C2P payment status is pending<br/>order_id: ' . $order_id . '<br/>transaction_ref: ' . $transaction_ref . '<br/>eci: ' . $eic . '<br/>transaction_datetime: ' . $transaction_datetime . '<br/>approval_code: ' . $approval_code);
 
-                                    $order->update_status('on-hold');
+                                    $order->update_status('awaiting-payment');
                                     $woocommerce->cart->empty_cart();
                                 } 
                                 else {
@@ -412,6 +527,7 @@ function fun2c2p_init()
                                 $this->msg['class']   = 'error';
                                 $this->msg['message'] = "Security Error. Illegal access detected.";
                                 $order->add_order_note('Checksum ERROR: ' . json_encode($_REQUEST));
+                                $order->update_status('failed');
                             }
                             if (!$trans_authorised) {                                
                                 $order->update_status('cancelled');                                
@@ -436,7 +552,7 @@ function fun2c2p_init()
                 else {
                     $checkout_payment_url = get_permalink(get_option('woocommerce_pay_page_id'));
                 }
-
+                
                 wp_redirect($redirect_url); exit;
             }
         }
@@ -450,7 +566,7 @@ function fun2c2p_init()
 
     function wp_2c2p_remove_stored_card_Id_ajax(){
 
-        $data = $_POST['data'];
+        $data = $_POST['data']; 
 
         if(!isset($data['token_id']) || !intval($data['token_id'])){
             echo "0"; die;
@@ -470,8 +586,8 @@ function fun2c2p_init()
         }
 
         if($isFounded){
-            echo delete_user_meta(get_current_user_id(), 'wc_2c2p_stored_card',$stored_card_data); die;
-        }
+        echo delete_user_meta(get_current_user_id(), 'wc_2c2p_stored_card',$stored_card_data); die;        
+    }
         else{
             echo "0"; die;
         }
