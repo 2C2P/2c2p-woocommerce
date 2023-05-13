@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
 
     //Hide remove button when user select first option from dropdown (l'll use my new card)
-    $('#wc_2c2p_stored_card').live('change', function() {
+    $('#wc_2c2p_stored_card').on('change', function() {
         var value = $('#wc_2c2p_stored_card').val();
 
         if (value === "0") {
@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
     });
 
     //Button click event
-    $('#btn_2c2p_remove').live('click', function() {
+    $('#btn_2c2p_remove').on('click', function() {
 		if($("#wc_2c2p_stored_card").val() === "0"){
 			alert("Please select card number to delete.");
 			return;
