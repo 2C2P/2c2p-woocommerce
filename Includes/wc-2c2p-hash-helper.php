@@ -76,9 +76,15 @@ class wc_2c2p_hash_helper{
 
 		if(array_key_exists('ippMerchantAbsorbRate',$parameter)) $this->params .= $parameter['ippMerchantAbsorbRate'];
 
+		if(array_key_exists('payment_scheme',$parameter)) $this->params .= $parameter['payment_scheme'];
+
+		if(array_key_exists('process_by',$parameter)) $this->params .= $parameter['process_by'];
+
+		if(array_key_exists('sub_merchant_list',$parameter)) $this->params .= $parameter['sub_merchant_list'];
+
 		$secret_key  = $this->pg_2c2p_setting_values['key_secret'];
 
-        $hash = hash_hmac('sha1', $this->params,$secret_key, false); // Generate the hash value.
+        $hash = hash_hmac('sha256', $this->params,$secret_key, false); // Generate the hash value.
 
         if(strcasecmp($hash,$parameter['hash_value']) == 0) return true;
 
@@ -195,7 +201,7 @@ class wc_2c2p_hash_helper{
     	$SECRETKEY  = esc_attr($this->pg_2c2p_setting_values['key_secret']);   
 
         // Generate the hash value.
-    	return hash_hmac('sha1', $this->hashValue, $SECRETKEY, false);
+    	return hash_hmac('sha256', $this->hashValue, $SECRETKEY, false);
     }
 }
 

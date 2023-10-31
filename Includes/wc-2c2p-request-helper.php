@@ -4,11 +4,6 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
 {
     private $pg_2c2p_setting_values;
 
-    function __construct() { 
-        $objWC_Gateway_2c2p = new WC_Gateway_2c2p();
-        $this->pg_2c2p_setting_values = $objWC_Gateway_2c2p->wc_2c2p_get_setting();
-    }
-
     private $wc_2c2p_form_fields = array(
         "version" => "",
         "merchant_id" => "", 
@@ -35,6 +30,16 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
         "default_lang" => "",
         "statement_descriptor" => "",
         "hash_value" => "" );
+
+    function __construct() { 
+        global $woocommerce;
+
+        $objWC_Gateway_2c2p = new WC_Gateway_2c2p();
+        $this->pg_2c2p_setting_values = $objWC_Gateway_2c2p->wc_2c2p_get_setting();
+        $this->wc_2c2p_form_fields['user_defined_1'] = $woocommerce->session->order_awaiting_payment;
+        $this->wc_2c2p_form_fields['user_defined_2'] = get_bloginfo() . ' ' . get_site_url();
+        $this->wc_2c2p_form_fields['user_defined_3'] = '2C2P Redirect API for WooCommerce V7.0.3';
+    }
     
     public function wc_2c2p_construct_request($isloggedin,$paymentBody)
     {        
@@ -143,8 +148,9 @@ class wc_2c2p_construct_request_helper extends WC_Payment_Gateway
             if($key === $currenyCode){
                 return  $value['Num'];
             }
-            return "";
+           
         }
+		 return "";
     }
 }
 

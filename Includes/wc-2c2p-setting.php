@@ -11,7 +11,7 @@ return array(
     'title' => array(
         'title' => __('Title', 'woo_2c2p'),
         'type' => 'text',
-        'default' => __('2C2P Payment', 'woo_2c2p'),
+        'default' => __('Credit / Debit Card and Cash Payment (2C2P)', 'woo_2c2p'),
         'description' => __('This controls the title which the user sees during checkout.', 'woo_2c2p'),
         'desc_tip' => true
     ),    
@@ -85,5 +85,12 @@ return array(
             'zh' => 'Simplified Chinese',
         ),
     ),    
+    'wc_2c2p_fixed_description' => array(
+        'title' => __('Fixed Description', 'woo_2c2p'),
+        'type' => 'textarea',
+        'default' => __('Fixed Description.', 'woo_2c2p'),
+        'description' => __('Fixed product description which display during payment.', 'woo_2c2p'),
+        'desc_tip' => true,        
+    ),
 );
 ?> 

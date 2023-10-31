@@ -4,7 +4,7 @@ Author URI: https://www.2C2P.com
 Tags: ecommerce, e-commerce, woocommerce, wordpress ecommerce, 2c2p, payment gateway, credit card
 Requires at least: 2.6.0
 Tested up to: 4.8
-Stable tag: 7.0.1
+Stable tag: 7.0.3
 License: MIT
 
 Accept Payment (Credit/Debit Cards, Alipay, Alternative/Cash Payments) on your WooCommerce webstore.
@@ -54,6 +54,13 @@ Please contact our sales team at support@2c2p.com
 4. Customer can see the payment result page.
 
 == Changelog ==
+= 7.0.3 =
+* Stock deduction after payment successful
+
+= 7.0.2 =
+* Added label to show plugin version on setting page
+* Added fixed description field
+
 = 7.0.1 =
 * Added language support
 * Fix issue with payment status
